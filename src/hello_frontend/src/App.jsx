@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { hello_backend } from 'declarations/hello_backend';
+import { useState } from "react";
+import { hello_backend } from "declarations/hello_backend";
 
 function App() {
-  const [greeting, setGreeting] = useState('');
+  const [greeting, setGreeting] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault();
