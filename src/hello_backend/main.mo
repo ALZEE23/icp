@@ -5,7 +5,7 @@ import Text "mo:base/Text";
 // import Base16 "mo:base16/Base16";
 
 
-// persistent actor cihuy {
+persistent actor cihuy {
 //   stable var dataStore : [(Nat, Text)] = [];
 //   public func saveData(id : Nat, value : Text) : async Text {
 //     let buf = Buffer.fromArray<(Nat, Text)>(dataStore);
