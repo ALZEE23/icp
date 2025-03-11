@@ -16,9 +16,7 @@ import Text "mo:base/Text";
 //   };
 // };
 
-persistent actor cihuy2 {
-  public query func greet(name : Text) : async Text {
-    return "Hello, " # name # "!";
+  public query func greet2(name : Text) : async Text {
+    return "Hello from cihuy2, " # name # "!";
   };
 };
-
