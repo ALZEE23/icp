@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 import environment from 'vite-plugin-environment';
 import dotenv from 'dotenv';
 
+
 dotenv.config({ path: '../../.env' });
 
 export default defineConfig({
@@ -18,17 +19,22 @@ export default defineConfig({
     },
   },
   server: {
+    allowedHosts: ['552f-103-28-116-240.ngrok-free.app'],
     proxy: {
       "/api": {
         target: "http://127.0.0.1:4943",
         changeOrigin: true,
       },
     },
+    watch: {
+      usePolling: true,
+    },
   },
   plugins: [
     react(),
     environment("all", { prefix: "CANISTER_" }),
     environment("all", { prefix: "DFX_" }),
+    
   ],
   resolve: {
     alias: [
