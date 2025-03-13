@@ -1,14 +1,17 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import About from "./pages/About";
-import Layout from "./components/Layout";
+import Sigin from "./pages/Sigin";
+import NotFound from "./pages/NotFound";
+
+
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route path="/" >
         <Route index element={<Home />} />
-        <Route path="about" element={<About />} />
+        <Route path="signin" element={<Sigin />} />
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );
