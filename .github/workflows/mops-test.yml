@@ -19,6 +19,13 @@ jobs:
           sudo rm -rf /opt/hostedtoolcache/node
           npm cache clean --force
 
+      - name: Hapus Versi Lama Node.js & Cache
+        run: |
+          sudo rm -rf /opt/hostedtoolcache/node/22.*
+          npm cache clean --force
+          rm -rf ~/.npm
+
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
