@@ -23,9 +23,7 @@ jobs:
       - name: run tests
         run: mops test
 
-      - name: Install DFINITY SDK (dfx)
-        run: |
-          DFX_VERSION=0.14.1
-          sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
-          echo "$HOME/bin" >> $GITHUB_PATH
-          dfx --version  # Debugging: cek apakah dfx berhasil terinstall
+      - name: Install dfx
+        uses: dfinity/setup-dfx@main
+      - name: Confirm successful installation
+        run: dfx --version
