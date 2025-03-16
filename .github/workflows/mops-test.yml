@@ -13,19 +13,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: Clear npm cache
-        run: npm cache clean --force
-
-      - name: Remove old global npm packages
-        run: rm -rf /opt/hostedtoolcache/node
-
       - name: Install latest mops
         run: npm install -g ic-mops
-
-      - name: Setup Node.js LTS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
 
       - name: install dfx
         uses: dfinity/setup-dfx@main
