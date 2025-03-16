@@ -20,10 +20,10 @@ jobs:
       - name: install mops packages
         run: mops install
 
-      - name: run tests
-        run: mops test
-
       - name: Install dfx
         uses: dfinity/setup-dfx@main
       - name: Confirm successful installation
         run: dfx --version
+
+      - name: run tests
+        run: mops test
