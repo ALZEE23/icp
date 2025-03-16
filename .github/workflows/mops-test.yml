@@ -26,6 +26,13 @@ jobs:
       - name: Install latest mops
         run: npm install -g ic-mops
 
+      - name: Cek Versi Node.js & Mops
+        run: |
+          node --version
+          npm list -g --depth=0
+          mops --version
+
+
       - name: install dfx
         uses: dfinity/setup-dfx@main
       - name: Confirm successful installation
