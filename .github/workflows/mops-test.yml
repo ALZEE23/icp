@@ -8,11 +8,16 @@ on:
   pull_request:
 
 jobs:
-  test: 
+  test:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: install dfx
+        uses: dfinity/setup-dfx@main
+      - name: Confirm successful installation
+        run: dfx --version
 
       - name: Remove old Node.js versions
         run: |
@@ -25,14 +30,12 @@ jobs:
           npm cache clean --force
           rm -rf ~/.npm
 
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 23
       - run: npm ci
       - run: npm test
-      
 
       - name: Install latest mops
         run: npm install -g ic-mops
@@ -43,11 +46,6 @@ jobs:
           npm list -g --depth=0
           mops --version
 
-
-      - name: install dfx
-        uses: dfinity/setup-dfx@main
-      - name: Confirm successful installation
-        run: dfx --version
       - uses: ZenVoich/setup-mops@v1
         with:
           mops-version: 1
