@@ -14,14 +14,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 23
       - name: Remove old Node.js versions
         run: |
           sudo rm -rf /opt/hostedtoolcache/node
           npm cache clean --force
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 23
+      
 
       - name: Install latest mops
         run: npm install -g ic-mops
