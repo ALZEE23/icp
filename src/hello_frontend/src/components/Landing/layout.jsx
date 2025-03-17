@@ -10,7 +10,8 @@ function Layout({ children }) {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Features", path: "/features" },
-    { name: "Pricing", path: "/pricing" }
+    { name: "Pricing", path: "/pricing" },
+    {name: "Lukman", path: "/about"}
   ];
 
   return (
