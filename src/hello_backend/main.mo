@@ -1,11 +1,11 @@
 import Text "mo:base/Text";
 import Nat "mo:base/Nat";
 import Buffer "mo:base/Buffer";
-import Trie "mo:base/Trie";
-import TrieMap "mo:base/TrieMap";
+// import Trie "mo:base/Trie";
+// import TrieMap "mo:base/TrieMap";
 import Blob "mo:base/Blob";
 import Principal "mo:base/Principal";
-import Array "mo:base/Array";
+// import Array "mo:base/Array";
 // import _Sha256 "mo:sha2/Sha256";
 // import Base16 "mo:base16/Base16";
 
@@ -25,13 +25,15 @@ persistent actor StorageChain {
   stable var userBalances : [(Principal, Nat)] = [];
 
   public shared func uploadFile(fileId : Nat, fileData : Blob) : async Text {
-    let caller = Principal.fromActor(StorageChain);
-    let fileSize = Array.size(Blob.toArray(fileData));
+    // how to get the id and save all of data user
+    // let caller = Principal.fromActor(StorageChain);
+    // let fileSize = Array.size(Blob.toArray(fileData));
     // let balance = userBalances.get(caller);
-    let upload = { fileStorage = [(fileId, fileData)] };
-
+    // let upload = { fileStorage = [(fileId, fileData)] };
+    let upload = Buffer.fromArray<(Nat, Blob)>(fileStorage);
+    upload.add((fileId, fileData));
+    fileStorage := Buffer.toArray(upload);
     // how to send the data and update the canister maybe with buffer  
-
     return "File uploaded";
   };
 
