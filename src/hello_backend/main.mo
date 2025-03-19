@@ -21,8 +21,8 @@ persistent actor StorageChain {
 
   stable var fileStorage : [(Nat, Blob)] = [];
   // stable var fileTimeStamps : [(Text, Int)] = [];
-  stable var userStorage : [(Principal, Nat)] = [];
-  stable var userBalances : [(Principal, Nat)] = [];
+  stable var _userStorage : [(Principal, Nat)] = [];
+  stable var _userBalances : [(Principal, Nat)] = [];
 
   public shared func uploadFile(fileId : Nat, fileData : Blob) : async Text {
     // how to get the id and save all of data user
@@ -33,7 +33,10 @@ persistent actor StorageChain {
     let upload = Buffer.fromArray<(Nat, Blob)>(fileStorage);
     upload.add((fileId, fileData));
     fileStorage := Buffer.toArray(upload);
-    // how to send the data and update the canister maybe with buffer  
+    if (fileStorage.size() > 1_000_000) {
+      return "File too large";
+    };
+    // how to send the data and update the canister maybe with buffer
     return "File uploaded";
   };
 
