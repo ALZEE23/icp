@@ -1,3 +1,3 @@
 service : {
-  greet2: (text) -> (text) query;
+  saveData: (nat, text) -> (text);
 }
