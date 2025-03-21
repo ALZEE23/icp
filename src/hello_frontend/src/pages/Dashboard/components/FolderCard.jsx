@@ -3,7 +3,7 @@ import { Folder, MoreVertical } from 'lucide-react';
 
 const FolderCard = ({ title, files, size }) => {
   return (
-    <div className="folder-card animate-slide-up bg-[#1a1a2e] border border-blue-500/50 shadow-lg shadow-blue-500/20 rounded-lg p-5 flex justify-between items-center transition hover:shadow-blue-500/40">
+    <div className="folder-card animate-slide-up bg-[#0d0d0d] border border-blue-500/50 shadow-lg shadow-blue-500/20 rounded-lg p-5 flex justify-between items-center transition hover:shadow-blue-500/40">
       {/* Kiri: Icon + Info */}
       <div className="flex items-center flex-1 space-x-4">
         {/* Icon dengan efek gradient */}

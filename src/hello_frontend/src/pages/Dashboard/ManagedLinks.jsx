@@ -11,6 +11,7 @@ import {
   Shield, 
   Users 
 } from "lucide-react";
+import Layout from "../../pages/Dashboard/components/layout";
 
 const initialLinks = [
   { id: "1", name: "Marketing Assets", folder: "Marketing", url: "https://example.com/share/marketing", accessed: 24, created: "2023-10-15", expires: "2024-10-15" },
@@ -79,6 +80,7 @@ const ManagedLinks = () => {
   };
 
   return (
+    <Layout>
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">Managed Links & Access</h1>
@@ -177,6 +179,7 @@ const ManagedLinks = () => {
         </div>
       </div>
     </div>
+    </Layout>
   );
 };
 
