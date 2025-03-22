@@ -18,7 +18,7 @@ const UserProfile = () => {
     <div className="relative">
       <button 
         onClick={toggleDropdown}
-        className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-100 transition-colors"
+        className="flex items-center space-x-2 p-2 rounded-full hover:bg-gray-700 transition-colors"
         aria-expanded={isDropdownOpen}
       >
         <div className="relative flex-shrink-0">
@@ -37,8 +37,8 @@ const UserProfile = () => {
       </button>
       
       {isDropdownOpen && (
-        <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg py-2 border z-10">
-          <div className="px-4 py-2 border-b sm:hidden">
+        <div className="absolute right-0 mt-2 w-56 bg-[#0d0d0d] rounded-lg shadow-lg py-2 z-10">
+          <div className="px-4 py-2  sm:hidden">
             <p className="text-sm font-medium">John Doe</p>
             <p className="text-xs text-gray-500">john@example.com</p>
           </div>
@@ -47,18 +47,14 @@ const UserProfile = () => {
             <UserRound className="h-4 w-4 mr-3 text-gray-500" />
             Profile
           </a>
-          
-          <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-            <Bell className="h-4 w-4 mr-3 text-gray-500" />
-            Notifications
-          </a>
+  
           
           <a href="#" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
             <Settings className="h-4 w-4 mr-3 text-gray-500" />
             Settings
           </a>
           
-          <div className="border-t my-1"></div>
+          <div className="border-t  border-gray-800 my-1"></div>
           
           <a href="#" className="flex items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
             <LogOut className="h-4 w-4 mr-3" />

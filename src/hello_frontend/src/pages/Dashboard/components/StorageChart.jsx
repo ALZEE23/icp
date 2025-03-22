@@ -20,7 +20,7 @@ const StorageChart = ({ data }) => {
   const totalGB = data.reduce((sum, item) => sum + item.value, 0);
   
   return (
-    <div className="bg-black/50 backdrop-blur-md rounded-xl p-6 
+    <div className="bg-[#0d0d0d] backdrop-blur-md rounded-xl p-6 
       border border-blue-500/30 shadow-lg shadow-blue-500/10 animate-fade-in">
       
       {/* Header */}
