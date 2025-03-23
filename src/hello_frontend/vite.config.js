@@ -1,8 +1,9 @@
-import { fileURLToPath, URL } from 'url';
+import { URL, fileURLToPath } from 'url';
+import tailwindcss from "@tailwindcss/vite"
 import react from '@vitejs/plugin-react';
+import dotenv from 'dotenv';
 import { defineConfig } from 'vite';
 import environment from 'vite-plugin-environment';
-import dotenv from 'dotenv';
 
 
 dotenv.config({ path: '../../.env' });
@@ -34,7 +35,7 @@ export default defineConfig({
     react(),
     environment("all", { prefix: "CANISTER_" }),
     environment("all", { prefix: "DFX_" }),
-    
+    tailwindcss(),
   ],
   resolve: {
     alias: [
