@@ -1,9 +1,9 @@
 import { ArrowRight, Plus, Search } from "lucide-react";
 import React, { useState } from "react";
-import Layout from "../../pages/Dashboard/components/layout";
 import FileCard from "./components/FileCard";
 import FolderCard from "./components/FolderCard";
 import StorageChart from "./components/StorageChart";
+import Layout from "./components/layout";
 
 function dashboard() {
     const [searchQuery, setSearchQuery] = useState("");
