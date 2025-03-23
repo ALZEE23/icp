@@ -10,36 +10,38 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
-  }
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+
+    .browser-warning {
+        display: none;
+    }
+
+    canvas {
+        width: 100vw !important; /* Paksa pas layar */
+        height: 100vh !important; /* Paksa pas layar */
+        object-fit: cover; /* Hindari distorsi */
+        overflow: hidden; /* Pastikan nggak bocor */
+    }
+    
+    @keyframes moving-border {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+      }
+    }
+      
+    body {
+        font-family: 'Poppins', sans-serif;
+    }
 }
-
-canvas {
-    width: 100vw !important; /* Paksa pas layar */
-    height: 100vh !important; /* Paksa pas layar */
-    object-fit: cover; /* Hindari distorsi */
-    overflow: hidden; /* Pastikan nggak bocor */
-  }
-
-  @keyframes moving-border {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
-  }
-  
-  body {
-    font-family: 'Poppins', sans-serif;
-  }
-  
-  
