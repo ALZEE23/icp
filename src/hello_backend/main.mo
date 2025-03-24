@@ -6,6 +6,8 @@ import Nat "mo:base/Nat";
 import Blob "mo:base/Blob";
 import Principal "mo:base/Principal";
 import Array "mo:base/Array";
+import Option "mo:base/Option";
+// import Iter "mo:base/Iter";
 // import _Sha256 "mo:sha2/Sha256";
 // import Base16 "mo:base16/Base16";
 
@@ -15,26 +17,46 @@ persistent actor StorageChain {
   stable var _userStorage : [(Principal, Nat)] = [];
   stable var _userBalances : [(Principal, Nat)] = [];
 
-  public shared func uploadFile(fileId : Nat, fileData : Blob) : async Text {
-    let caller = Principal.fromActor(StorageChain);
+  public shared (msg) func uploadFile(fileId : Nat, fileData : Blob) : async Text {
+    let caller = msg.caller;
     if (Array.size(Blob.toArray(fileData)) > 1_000_000) {
-        return "File too large";
+      return "File too large";
     };
 
-   let userFiles : ?(Principal, [(Nat, Blob)]) = Array.find<(Principal, [(Nat, Blob)])>(
-  fileStorage, 
-  func (entry : (Principal, [(Nat, Blob)])) : Bool {
-    entry.0 == caller
-  }
-);
+    //    let userFiles : ?(Principal, [(Nat, Blob)]) = Array.find<(Principal, [(Nat, Blob)])>(
+    //   fileStorage,
+    //   func (entry : (Principal, [(Nat, Blob)])) : Bool {
+    //     entry.0 == caller
+    //   }
+    // );
 
-    
-    let updatedFiles = switch (userFiles) {
-      case (?(_, files)) { Array.append([(fileId, fileData)], files) };
-      case (null) { [(fileId, fileData)] }; 
-    };
+    let existingFiles = Option.get(
+      Array.find(
+        fileStorage,
+        func(entry : (Principal, [(Nat, Blob)])) : Bool {
+          entry.0 == caller;
+        },
+      ),
+      (caller, []) // Jika tidak ditemukan, gunakan daftar kosong
+    );
 
-    fileStorage := Array.filter(fileStorage, func ((p, _) : (Principal, [(Nat, Blob)])) : Bool { p != caller });
+    // let updatedFiles = switch (userFiles) {
+    //   case (?(_, files)) { Array.append([(fileId, fileData)], files) };
+    //   case (null) { [(fileId, fileData)] };
+    // };
+
+    // fileStorage := Array.filter(fileStorage, func((p, _) : (Principal, [(Nat, Blob)])) : Bool { p != caller });
+
+    // fileStorage := Array.append([(caller, updatedFiles)], fileStorage);
+
+    let updatedFiles = Array.append([(fileId, fileData)], existingFiles.1);
+
+    fileStorage := Array.filter(
+        fileStorage,
+        func(entry : (Principal, [(Nat, Blob)])) : Bool {
+            not Principal.equal(entry.0, caller)
+        }
+    );
 
     fileStorage := Array.append([(caller, updatedFiles)], fileStorage);
 

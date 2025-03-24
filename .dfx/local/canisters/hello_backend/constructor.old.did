@@ -1,3 +1,4 @@
 service : {
-  saveData: (nat, text) -> (text);
+  downloadFile: (nat) -> (nat, blob);
+  uploadFile: (nat, blob) -> (text);
 }

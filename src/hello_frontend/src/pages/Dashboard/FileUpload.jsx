@@ -1,6 +1,35 @@
 import React, { useState } from "react";
 import { Upload, Plus, FileUp, Check, X } from "lucide-react";
 import Layout from "../../pages/Dashboard/components/layout";
+import { Actor, HttpAgent } from "@dfinity/agent";
+import { canisterId, createActor } from "../../../../declarations/hello_backend";
+
+
+const agent = new HttpAgent.create();
+const backend = createActor(canisterId, { agent });
+
+const uploadFiles = async () => {
+  if (files.length === 0) return;
+
+  setUploading(true);
+
+  try {
+    for (const file of files) {
+      const arrayBuffer = await file.arrayBuffer();
+      const blob = new Uint8Array(arrayBuffer); // Konversi ke Uint8Array
+
+      await backend.uploadFile(file.id, blob); // Kirim ke backend
+    }
+
+    alert("Files uploaded successfully!");
+  } catch (error) {
+    console.error("Upload failed:", error);
+    alert("Failed to upload files.");
+  }
+
+  setUploading(false);
+};
+
 
 const FileUpload = () => {
   const [files, setFiles] = useState([]);

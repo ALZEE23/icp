@@ -1,4 +1,6 @@
 // Version: 1.0.0
 actor {
-  stable var dataStore : [(Nat, Text)]
+  stable var _userBalances : [(Principal, Nat)];
+  stable var _userStorage : [(Principal, Nat)];
+  stable var fileStorage : [(Nat, Blob)]
 };

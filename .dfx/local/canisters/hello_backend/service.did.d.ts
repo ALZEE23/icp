@@ -3,7 +3,6 @@ import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
 export interface _SERVICE {
-  'downloadFile' : ActorMethod<[bigint], [bigint, Uint8Array | number[]]>,
   'uploadFile' : ActorMethod<[bigint, Uint8Array | number[]], string>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;
