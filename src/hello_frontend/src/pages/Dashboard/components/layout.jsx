@@ -1,46 +1,44 @@
-import React, { useState } from 'react';
-import FileManagerNav from './FileManagerNav';
-import FileCard from './FileCard';
-import FolderCard from './FolderCard';
-import StorageChart from './StorageChart';
-import Sidebar from './Sidebar';
-import { Search, Plus, ArrowRight } from 'lucide-react';
-import { WavyBackground } from '../../../components/ui/wavy-background';
+import { ArrowRight, Plus, Search } from "lucide-react";
+import React, { useState } from "react";
+import { WavyBackground } from "../../../components/ui/wavy-background";
+import FileCard from "./FileCard";
+import FileManagerNav from "./FileManagerNav";
+import FolderCard from "./FolderCard";
+import Sidebar from "./Sidebar";
+import StorageChart from "./StorageChart";
 
 const Index = ({ children }) => {
-   
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-
-    
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
 
     return (
-        <WavyBackground className="w-screen h-screen flex items-center justify-center ">
+        <WavyBackground className="flex h-screen w-screen items-center justify-center ">
             {/* Floating Dashboard */}
-            <div className="relative w-full max-w-9xl h-screen bg-black/70 backdrop-blur-lg shadow-xl  md:p-6 z-10 overflow-hidden  ">
-                <div className="bg-black/10 backdrop-blur-xl flex rounded-lg md:overflow-hidden mx-auto w-full h-full z-20 border-t-8 border-blue-500">
+            <div className="relative z-10 h-screen w-full max-w-9xl overflow-hidden bg-black/70 shadow-xl backdrop-blur-lg md:p-6 ">
+                <div className="z-20 mx-auto flex h-full w-full rounded-lg border-blue-500 border-t-8 bg-black/10 backdrop-blur-xl md:overflow-hidden">
                     {/* Sidebar */}
-                    <div className={`fixed inset-y-0 left-0 transform ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out z-30`}>
+                    <div
+                        className={`fixed inset-y-0 left-0 transform ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} z-30 transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0`}
+                    >
                         <Sidebar />
                     </div>
 
                     {/* Backdrop for mobile */}
                     {isSidebarOpen && (
                         <div
-                            className="fixed inset-0 bg-black/20 backdrop-blur-sm lg:hidden z-20"
+                            className="fixed inset-0 z-20 bg-black/20 backdrop-blur-sm lg:hidden"
                             onClick={toggleSidebar}
                         ></div>
                     )}
 
                     {/* Main Dashboard */}
-                    <div className="flex-1 flex flex-col min-w-0 z-10">
+                    <div className="z-10 flex min-w-0 flex-1 flex-col">
                         <FileManagerNav toggleSidebar={toggleSidebar} />
 
                         {children}
-
                     </div>
                 </div>
             </div>
