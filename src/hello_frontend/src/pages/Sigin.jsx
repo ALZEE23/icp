@@ -1,12 +1,12 @@
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Gunakan untuk redirect ke dashboard
+import { useNavigate } from "react-router-dom"; 
 import { WavyBackground } from "../components/ui/wavy-background";
 import { AuthClient } from "@dfinity/auth-client";
 
 function Login() {
   const [principal, setPrincipal] = useState(null);
-  const [error, setError] = useState(null); // State untuk menampilkan error
+  const [error, setError] = useState(null); 
   const navigate = useNavigate();
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 export const idlFactory = ({ IDL }) => {
   return IDL.Service({
-    'greet2' : IDL.Func([IDL.Text], [IDL.Text], ['query']),
+    'uploadFile' : IDL.Func([IDL.Nat, IDL.Vec(IDL.Nat8)], [IDL.Text], []),
   });
 };
 export const init = ({ IDL }) => { return []; };
