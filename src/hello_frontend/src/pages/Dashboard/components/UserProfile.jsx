@@ -1,7 +1,9 @@
 import { Bell, ChevronDown, LogOut, Settings, UserRound } from "lucide-react";
 import React, { useState } from "react";
+import { useAuth } from "~/contexts/AuthContext";
 
 const UserProfile = () => {
+    const { user } = useAuth();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const toggleDropdown = () => {

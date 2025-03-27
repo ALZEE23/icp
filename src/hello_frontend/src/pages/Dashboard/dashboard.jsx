@@ -5,6 +5,7 @@ import FolderCard from "./components/FolderCard";
 import StorageChart from "./components/StorageChart";
 import Layout from "./components/layout";
 
+
 function dashboard() {
     const [searchQuery, setSearchQuery] = useState("");
     const storageData = [

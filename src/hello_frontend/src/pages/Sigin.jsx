@@ -1,12 +1,12 @@
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { WavyBackground } from "../components/ui/wavy-background";
 import { AuthClient } from "@dfinity/auth-client";
 
 function Login() {
   const [principal, setPrincipal] = useState(null);
-  const [error, setError] = useState(null); 
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,9 +30,9 @@ function Login() {
           let identity = authClient.getIdentity();
           let userPrincipal = identity.getPrincipal().toText();
           setPrincipal(userPrincipal);
-          localStorage.setItem("principal", userPrincipal); 
+          localStorage.setItem("user", userPrincipal);
           console.log("Login berhasil, Principal ID:", userPrincipal);
-          navigate("/dashboard"); 
+          navigate("/dashboard");
         },
         onError: (err) => {
           console.error("Login gagal:", err);
@@ -49,8 +49,8 @@ function Login() {
     const authClient = await AuthClient.create();
     await authClient.logout();
     setPrincipal(null);
-    localStorage.removeItem("principal"); 
-    navigate("/"); 
+    localStorage.removeItem("principal");
+    navigate("/");
   };
 
   return (

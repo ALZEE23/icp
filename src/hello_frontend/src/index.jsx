@@ -9,10 +9,13 @@ import Home from "~/pages/Home";
 import NotFound from "~/pages/NotFound";
 import Sigin from "~/pages/Sigin";
 import "~/styles/index.css";
+// import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./contexts/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
-        <BrowserRouter>
+        <AuthProvider>
+            <BrowserRouter>
             <Routes>
                 <Route path="/">
                     <Route index element={<Home />} />
@@ -24,5 +27,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 </Route>
             </Routes>
         </BrowserRouter>
+        </AuthProvider>
     </React.StrictMode>,
 );

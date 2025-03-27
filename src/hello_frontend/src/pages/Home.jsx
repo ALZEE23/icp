@@ -7,6 +7,7 @@ import { HowItWorks } from "../components/Landing/HowItWorks";
 import Layout from "../components/Landing/layout";
 import { WavyBackground } from "../components/ui/wavy-background";
 
+
 const Index = () => {
     return (
         <div className=" relative overflow-hidden">
