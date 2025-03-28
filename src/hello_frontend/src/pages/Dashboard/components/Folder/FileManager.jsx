@@ -30,27 +30,30 @@ const FileManager = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [folders, setFolders] = useState([]);
   const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
+useEffect(() => {
     const fetchUserFiles = async () => {
-      try {
-        const userFiles = await hello_backend.getUserFiles();
+        setLoading(true);
+        try {
+            const userFiles = await hello_backend.getUserFiles();
 
-        
-        const formattedFiles = userFiles.map(([id, fileData]) => ({
-          id,
-          name: `File_${id}`, 
-          size: `${(fileData.length / 1024).toFixed(2)} KB`, 
-        }));
+            const formattedFiles = userFiles.map(([id, fileData]) => ({
+                id,
+                name: `File_${id}`,
+                size: `${(fileData.length / 1024).toFixed(2)} KB`,
+            }));
 
-        setFiles(formattedFiles);
-      } catch (error) {
-        console.error("Gagal mengambil file:", error);
-      }
+            setFiles(formattedFiles);
+        } catch (error) {
+            console.error("Gagal mengambil file:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     fetchUserFiles();
-  }, []);
+}, []);
 
   const filteredFolders = folders.filter((folder) =>
     folder.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -154,29 +157,37 @@ const FileList = ({ folders, files }) => (
     </div>
   );
 
-  return (
+return (
     <div className="min-h-screen bg-black flex">
-    <Layout>
-        <div className="container mx-auto px-4 py-6 ">
-            <div className="search-bar w-full sm:w-96 relative mb-4">
-                <input
-                    type="text"
-                    placeholder="Search files and folders..."
-                    className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary bg-gray-900 text-white"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-            </div>
-            {filteredFolders.length === 0 && filteredFiles.length === 0 ? (
-                <EmptyState />
-            ) : (
-                <FileList folders={filteredFolders} files={filteredFiles} />
-            )}
-        </div>
-    </Layout>
-</div>
-  );
+            <Layout>
+                    <div className="container mx-auto px-4 py-6 ">
+                            <div className="search-bar w-full sm:w-96 relative mb-4">
+                                    <input
+                                            type="text"
+                                            placeholder="Search files and folders..."
+                                            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary bg-gray-900 text-white"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                    <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                            </div>
+                            {loading ? (
+                                    <div className="flex justify-center items-center py-12">
+                                            <div className="flex flex-col items-center">
+                                                    <div className="loader border-t-4 border-b-4 border-primary rounded-full w-12 h-12 animate-spin"></div>
+                                                    <p className="mt-4 text-gray-400 text-sm">Loading your files...</p>
+                                            </div>
+                                    </div>
+                            ) : filteredFolders.length === 0 && filteredFiles.length === 0 ? (
+                                    <EmptyState />
+                            ) : (
+                                    <FileList folders={filteredFolders} files={filteredFiles} />
+                            )}
+                    </div>
+            </Layout>
+    </div>
+);
+
 };
 
 export default FileManager;
