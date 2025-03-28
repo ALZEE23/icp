@@ -6,6 +6,8 @@ import {
   canisterId,
   createActor,
 } from "../../../../declarations/hello_backend";
+import {toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const agent = new HttpAgent();
 const backend = createActor(canisterId, { agent });
@@ -94,7 +96,17 @@ const FileUpload = () => {
             await backend.uploadFile(BigInt(file.id), blob);
           }
 
-          alert("Files uploaded successfully!");
+            toast.success("Files uploaded successfully!", {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+              transition: "colored",
+            });
         } catch (error) {
           console.error("Upload failed:", error);
           alert("Failed to upload files.");

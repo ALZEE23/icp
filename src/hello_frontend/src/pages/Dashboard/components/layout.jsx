@@ -15,7 +15,7 @@ const Index = ({ children }) => {
     };
 
     return (
-        <WavyBackground className="flex h-screen w-screen items-center justify-center ">
+        <div className="flex h-screen w-screen items-center justify-center ">
             {/* Floating Dashboard */}
             <div className="relative z-10 h-screen w-full max-w-9xl overflow-hidden bg-black/70 shadow-xl backdrop-blur-lg md:p-6 ">
                 <div className="z-20 mx-auto flex h-full w-full rounded-lg border-blue-500 border-t-8 bg-black/10 backdrop-blur-xl md:overflow-hidden">
@@ -42,7 +42,7 @@ const Index = ({ children }) => {
                     </div>
                 </div>
             </div>
-        </WavyBackground>
+        </div>
     );
 };
 
