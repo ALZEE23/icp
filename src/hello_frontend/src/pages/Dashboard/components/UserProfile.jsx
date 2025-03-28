@@ -9,6 +9,7 @@ const UserProfile = () => {
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
+    
 
     return (
         <div className="relative">
