@@ -52,10 +52,10 @@ persistent actor StorageChain {
     let updatedFiles = Array.append([(fileId, fileData)], existingFiles.1);
 
     fileStorage := Array.filter(
-        fileStorage,
-        func(entry : (Principal, [(Nat, Blob)])) : Bool {
-            not Principal.equal(entry.0, caller)
-        }
+      fileStorage,
+      func(entry : (Principal, [(Nat, Blob)])) : Bool {
+        not Principal.equal(entry.0, caller);
+      },
     );
 
     fileStorage := Array.append([(caller, updatedFiles)], fileStorage);
@@ -66,5 +66,47 @@ persistent actor StorageChain {
   // public shared func downloadFile(fileId : Nat) : async (Nat, Blob) {
   //   return fileStorage.get(fileId);
   // };
+
+  public shared (msg) func getUserFiles() : async [(Nat, Blob)] {
+    let maybeUserFiles = Array.find(
+      fileStorage,
+      func(entry : (Principal, [(Nat, Blob)])) : Bool {
+        entry.0 == msg.caller;
+      },
+    );
+
+    switch maybeUserFiles {
+      case (?(_, files)) { return files };
+      case null { return [] };
+    };
+  };
+
+  public shared (msg) func downloadFile(fileId : Nat) : async ?Blob {
+    let caller = msg.caller;
+
+
+    let userFiles = Option.get(
+      Array.find(
+        fileStorage,
+        func(entry : (Principal, [(Nat, Blob)])) : Bool {
+          entry.0 == caller;
+        },
+      ),
+      (caller, []) 
+    );
+
+    
+    let fileData = Array.find(
+      userFiles.1,
+      func(entry : (Nat, Blob)) : Bool {
+        entry.0 == fileId;
+      },
+    );
+
+    switch fileData {
+      case (?(_, blob)) { return ?blob }; 
+      case (null) { return null }; 
+    };
+  };
 
 };
