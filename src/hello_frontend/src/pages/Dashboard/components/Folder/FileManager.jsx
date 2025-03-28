@@ -1,31 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Search, Folder as FolderIcon, FolderX } from "lucide-react";
 import Layout from "../layout";
 import FileIcon from "./FileIcon";
+import { hello_backend } from "../../../../../../declarations/hello_backend";
 
-const folders = [
-  { id: 1, name: ".dfx", size: "4 KB" },
-  { id: 2, name: ".github", size: "12 KB" },
-  { id: 3, name: ".mops", size: "8 KB" },
-  { id: 4, name: "deps", size: "20 KB" },
-  { id: 5, name: "node_modules", size: "150 MB" },
-  { id: 6, name: "src", size: "50 KB" },
-  { id: 7, name: "test", size: "10 KB" },
-];
 
-const files = [
-  { id: 1, name: ".env", size: "1 KB" },
-  { id: 2, name: ".gitignore", size: "1 KB" },
-  { id: 3, name: "dfx.json", size: "2 KB" },
-  { id: 4, name: "mops.toml", size: "1 KB" },
-  { id: 5, name: "package.json", size: "3 KB" },
-  { id: 6, name: "package-lock.json", size: "200 KB" },
-  { id: 7, name: "README.md", size: "5 KB" },
-  { id: 8, name: "tsconfig.json", size: "2 KB" },
-];
+// const folders = [
+//   { id: 1, name: ".dfx", size: "4 KB" },
+//   { id: 2, name: ".github", size: "12 KB" },
+//   { id: 3, name: ".mops", size: "8 KB" },
+//   { id: 4, name: "deps", size: "20 KB" },
+//   { id: 5, name: "node_modules", size: "150 MB" },
+//   { id: 6, name: "src", size: "50 KB" },
+//   { id: 7, name: "test", size: "10 KB" },
+// ];
+
+// const files = [
+//   { id: 1, name: ".env", size: "1 KB" },
+//   { id: 2, name: ".gitignore", size: "1 KB" },
+//   { id: 3, name: "dfx.json", size: "2 KB" },
+//   { id: 4, name: "mops.toml", size: "1 KB" },
+//   { id: 5, name: "package.json", size: "3 KB" },
+//   { id: 6, name: "package-lock.json", size: "200 KB" },
+//   { id: 7, name: "README.md", size: "5 KB" },
+//   { id: 8, name: "tsconfig.json", size: "2 KB" },
+// ];
 
 const FileManager = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [folders, setFolders] = useState([]);
+  const [files, setFiles] = useState([]);
+
+  useEffect(() => {
+    const fetchUserFiles = async () => {
+      try {
+        const userFiles = await hello_backend.getUserFiles();
+
+        
+        const formattedFiles = userFiles.map(([id, fileData]) => ({
+          id,
+          name: `File_${id}`, 
+          size: `${(fileData.length / 1024).toFixed(2)} KB`, 
+        }));
+
+        setFiles(formattedFiles);
+      } catch (error) {
+        console.error("Gagal mengambil file:", error);
+      }
+    };
+
+    fetchUserFiles();
+  }, []);
 
   const filteredFolders = folders.filter((folder) =>
     folder.name.toLowerCase().includes(searchQuery.toLowerCase())
