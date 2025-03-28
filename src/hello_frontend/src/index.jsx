@@ -9,24 +9,45 @@ import Home from "~/pages/Home";
 import NotFound from "~/pages/NotFound";
 import Sigin from "~/pages/Sigin";
 import "~/styles/index.css";
-// import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <React.StrictMode>
-        <AuthProvider>
-            <BrowserRouter>
-            <Routes>
-                <Route path="/">
-                    <Route index element={<Home />} />
-                    <Route path="signin" element={<Sigin />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="*" element={<NotFound />} />
-                    <Route path="/managed-links" element={<ManagedLinks />} />
-                    <Route path="/file-upload" element={<FileUpload />} />
-                </Route>
-            </Routes>
-        </BrowserRouter>
-        </AuthProvider>
-    </React.StrictMode>,
+  <React.StrictMode>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/">
+            <Route index element={<Home />} />
+            <Route path="signin" element={<Sigin />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+            <Route
+              path="/managed-links"
+              element={
+                <ProtectedRoute>
+                  <ManagedLinks />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/file-upload"
+              element={
+                <ProtectedRoute>
+                  <FileUpload />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  </React.StrictMode>
 );

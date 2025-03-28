@@ -3,8 +3,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { WavyBackground } from "../components/ui/wavy-background";
 import { AuthClient } from "@dfinity/auth-client";
+import { useAuth } from "../contexts/AuthContext";
 
 function Login() {
+  const { user, setUser } = useAuth();
   const [principal, setPrincipal] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -16,10 +18,11 @@ function Login() {
         const identity = authClient.getIdentity();
         const userPrincipal = identity.getPrincipal().toText();
         setPrincipal(userPrincipal);
+        setUser(userPrincipal);
       }
     };
     checkAuth();
-  }, []);
+  }, [setUser]);
 
   const loginWithICP = async () => {
     try {
@@ -30,6 +33,7 @@ function Login() {
           let identity = authClient.getIdentity();
           let userPrincipal = identity.getPrincipal().toText();
           setPrincipal(userPrincipal);
+          setUser(userPrincipal);
           localStorage.setItem("user", userPrincipal);
           console.log("Login berhasil, Principal ID:", userPrincipal);
           navigate("/dashboard");
@@ -49,7 +53,9 @@ function Login() {
     const authClient = await AuthClient.create();
     await authClient.logout();
     setPrincipal(null);
+    setUser(null);
     localStorage.removeItem("principal");
+    localStorage.removeItem("user");
     navigate("/");
   };
 

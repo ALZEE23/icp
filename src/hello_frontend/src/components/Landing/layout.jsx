@@ -7,9 +7,9 @@ import { useAuth } from "../../contexts/AuthContext";
 
 function Layout({ children }) {
   const { logout, login } = useAuth();
-  
+
   const user = localStorage.getItem("user");
-  
+
   console.log(user);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
@@ -61,8 +61,8 @@ function Layout({ children }) {
             <div>
               {user ? (
                 <div className="hidden gap-3 md:flex">
-                  <button
-                    onClick={logout}
+                  <Link
+                    to="/dashboard"
                     className="group flex w-16 items-center rounded-lg border border-gray-400 px-4 py-2 text-sm transition hover:bg-gray-700"
                   >
                     <User
@@ -70,9 +70,9 @@ function Layout({ children }) {
                       className="mx-auto mr-2 group-hover:hidden"
                     />
                     <span className="mx-auto hidden group-hover:inline-block">
-                      Logout
+                      dashboard
                     </span>
-                  </button>
+                  </Link>
                 </div>
               ) : (
                 <div className="hidden gap-3 md:flex">

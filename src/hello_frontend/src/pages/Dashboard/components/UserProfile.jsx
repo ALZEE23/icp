@@ -58,7 +58,7 @@ const UserProfile = () => {
                     <div className="my-1 border-gray-800 border-t"></div>
 
                     <a
-                        href="#"
+                        href="/signin"
                         className="flex items-center px-4 py-2 text-red-600 text-sm hover:bg-gray-100"
                     >
                         <LogOut className="mr-3 h-4 w-4" />
