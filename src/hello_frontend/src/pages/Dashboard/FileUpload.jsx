@@ -6,8 +6,8 @@ import {
   canisterId,
   createActor,
 } from "../../../../declarations/hello_backend";
-import {toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const agent = new HttpAgent();
 const backend = createActor(canisterId, { agent });
@@ -44,7 +44,7 @@ const FileUpload = () => {
     newFiles.forEach((file) => {
       const fileWithPreview = Object.assign(file, {
         preview: URL.createObjectURL(file),
-        id: BigInt(Date.now()), 
+        id: BigInt(Date.now()),
         progress: 0,
         status: "pending",
       });
@@ -91,22 +91,23 @@ const FileUpload = () => {
         try {
           for (const file of files) {
             const arrayBuffer = await file.arrayBuffer();
-            const blob = new Uint8Array(arrayBuffer); // Konversi ke Uint8Array
+            const blob = new Uint8Array(arrayBuffer);
+            console.log(file)
 
-            await backend.uploadFile(BigInt(file.id), blob);
+            await backend.uploadFile(BigInt(file.id), String(file.name), blob);
           }
 
-            toast.success("Files uploaded successfully!", {
-              position: "top-right",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "dark",
-              transition: "colored",
-            });
+          toast.success("Files uploaded successfully!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: "colored",
+          });
         } catch (error) {
           console.error("Upload failed:", error);
           alert("Failed to upload files.");

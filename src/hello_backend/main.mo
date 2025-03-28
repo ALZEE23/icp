@@ -13,11 +13,11 @@ import Option "mo:base/Option";
 
 persistent actor StorageChain {
 
-  stable var fileStorage : [(Principal, [(Nat, Blob)])] = [];
+  stable var fileStorage : [(Principal, [(Nat, Text, Blob)])] = [];
   stable var _userStorage : [(Principal, Nat)] = [];
   stable var _userBalances : [(Principal, Nat)] = [];
 
-  public shared (msg) func uploadFile(fileId : Nat, fileData : Blob) : async Text {
+  public shared (msg) func uploadFile(fileId : Nat, fileName : Text, fileData : Blob) : async Text {
     let caller = msg.caller;
     if (Array.size(Blob.toArray(fileData)) > 1_000_000) {
       return "File too large";
@@ -33,7 +33,7 @@ persistent actor StorageChain {
     let existingFiles = Option.get(
       Array.find(
         fileStorage,
-        func(entry : (Principal, [(Nat, Blob)])) : Bool {
+        func(entry : (Principal, [(Nat, Text, Blob)])) : Bool {
           entry.0 == caller;
         },
       ),
@@ -49,11 +49,11 @@ persistent actor StorageChain {
 
     // fileStorage := Array.append([(caller, updatedFiles)], fileStorage);
 
-    let updatedFiles = Array.append([(fileId, fileData)], existingFiles.1);
+    let updatedFiles = Array.append([(fileId, fileName, fileData)], existingFiles.1);
 
     fileStorage := Array.filter(
       fileStorage,
-      func(entry : (Principal, [(Nat, Blob)])) : Bool {
+      func(entry : (Principal, [(Nat, Text, Blob)])) : Bool {
         not Principal.equal(entry.0, caller);
       },
     );
@@ -67,10 +67,10 @@ persistent actor StorageChain {
   //   return fileStorage.get(fileId);
   // };
 
-  public shared (msg) func getUserFiles() : async [(Nat, Blob)] {
+  public shared (msg) func getUserFiles() : async [(Nat, Text, Blob)] {
     let maybeUserFiles = Array.find(
       fileStorage,
-      func(entry : (Principal, [(Nat, Blob)])) : Bool {
+      func(entry : (Principal, [(Nat, Text, Blob)])) : Bool {
         entry.0 == msg.caller;
       },
     );
@@ -81,31 +81,29 @@ persistent actor StorageChain {
     };
   };
 
-  public shared (msg) func downloadFile(fileId : Nat) : async ?Blob {
+  public shared (msg) func downloadFile(fileId : Nat) : async ?(Text, Blob) {
     let caller = msg.caller;
-
 
     let userFiles = Option.get(
       Array.find(
         fileStorage,
-        func(entry : (Principal, [(Nat, Blob)])) : Bool {
+        func(entry : (Principal, [(Nat, Text, Blob)])) : Bool {
           entry.0 == caller;
         },
       ),
-      (caller, []) 
+      (caller, []),
     );
 
-    
     let fileData = Array.find(
       userFiles.1,
-      func(entry : (Nat, Blob)) : Bool {
+      func(entry : (Nat, Text, Blob)) : Bool {
         entry.0 == fileId;
       },
     );
 
     switch fileData {
-      case (?(_, blob)) { return ?blob }; 
-      case (null) { return null }; 
+      case (?(_, name, blob)) { return ?(name, blob) };
+      case (null) { return null };
     };
   };
 

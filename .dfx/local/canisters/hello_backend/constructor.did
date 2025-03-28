@@ -1,8 +1,12 @@
 service : {
-  downloadFile: (nat) -> (opt blob);
+  downloadFile: (nat) -> (opt record {
+                                text;
+                                blob;
+                              });
   getUserFiles: () -> (vec record {
                              nat;
+                             text;
                              blob;
                            });
-  uploadFile: (nat, blob) -> (text);
+  uploadFile: (nat, text, blob) -> (text);
 }
