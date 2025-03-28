@@ -62,8 +62,8 @@ const FileCard = ({ type, title, used, files, size }) => {
 
             {/* Bottom Section */}
             <div className="mt-3 flex items-end justify-between">
-                <span className="text-gray-500 text-xs">{files} files</span>
-                <span className="font-semibold text-blue-400 text-sm">{size} GB</span>
+                <span className="text-gray-500 text-xs">{files}</span>
+                <span className="font-semibold text-blue-400 text-sm">{size}</span>
             </div>
         </div>
     );

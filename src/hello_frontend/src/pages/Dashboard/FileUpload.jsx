@@ -92,7 +92,7 @@ const FileUpload = () => {
           for (const file of files) {
             const arrayBuffer = await file.arrayBuffer();
             const blob = new Uint8Array(arrayBuffer);
-            console.log(file)
+            console.log(file);
 
             await backend.uploadFile(BigInt(file.id), String(file.name), blob);
           }
