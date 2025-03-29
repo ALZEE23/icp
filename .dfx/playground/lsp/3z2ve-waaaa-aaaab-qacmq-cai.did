@@ -1,3 +1,0 @@
-service : {
-  greet2: (text) -> (text) query;
-}

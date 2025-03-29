@@ -35,15 +35,15 @@ const getFileType = (fileName) => {
 
 const fetchUserFiles = async () => {
   try {
-    const files = await hello_backend.getUserFiles();
+    const files = await hello_backend.getFiles(); // Ambil file dari backend
 
-    return files.map((file) => {
-      const fileType = getFileType(file[1]);
+    return files.map((file, index) => {
+      const fileType = getFileType(file.name);
       return {
-        id: file[0],
-        name: file[1],
+        id: file.id || index, // Pastikan ID unik, gunakan index sebagai fallback
+        name: file.name,
         type: fileType,
-        size: `${(file[2].length / 1024).toFixed(2)} KB`,
+        size: `${(Number(file.size) / 1024).toFixed(2)} KB`,
       };
     });
   } catch (error) {

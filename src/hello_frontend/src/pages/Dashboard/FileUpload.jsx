@@ -44,7 +44,7 @@ const FileUpload = () => {
     newFiles.forEach((file) => {
       const fileWithPreview = Object.assign(file, {
         preview: URL.createObjectURL(file),
-        id: BigInt(Date.now()),
+        id: crypto.randomUUID(), // ✅ Menggunakan UUID untuk ID unik
         progress: 0,
         status: "pending",
       });
@@ -66,63 +66,49 @@ const FileUpload = () => {
 
     const updatedFiles = [...files];
 
-    const simulateProgress = async () => {
-      let allDone = true;
+    for (const file of updatedFiles) {
+      const arrayBuffer = await file.arrayBuffer();
+      const content = new Uint8Array(arrayBuffer);
+      const chunkSize = 1024 * 1024; // ✅ Dideklarasikan sebelum digunakan
+      const totalChunks = Math.ceil(content.length / chunkSize);
 
-      updatedFiles.forEach((file, index) => {
-        if (file.status === "pending") {
-          allDone = false;
-          file.progress += Math.floor(Math.random() * 15) + 5;
+      try {
+        for (let i = 0; i < totalChunks; i++) {
+          const start = i * chunkSize;
+          const end = Math.min(start + chunkSize, content.length);
+          const chunk = content.slice(start, end);
 
-          if (file.progress >= 100) {
-            file.progress = 100;
-            file.status = "complete";
-          }
+          await backend.uploadFileChunk(file.name, chunk, BigInt(i), file.type);
 
-          updatedFiles[index] = file;
+          file.progress = Math.floor(((i + 1) / totalChunks) * 100);
+          setFiles([...updatedFiles]);
         }
-      });
 
-      setFiles([...updatedFiles]);
-
-      if (!allDone) {
-        setTimeout(simulateProgress, 300);
-      } else {
-        try {
-          for (const file of files) {
-            const arrayBuffer = await file.arrayBuffer();
-            const blob = new Uint8Array(arrayBuffer);
-            console.log(file);
-
-            await backend.uploadFile(BigInt(file.id), String(file.name), blob);
-          }
-
-          toast.success("Files uploaded successfully!", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            transition: "colored",
-          });
-        } catch (error) {
-          console.error("Upload failed:", error);
-          alert("Failed to upload files.");
-        }
-        setUploading(false);
+        file.status = "complete";
+      } catch (error) {
+        console.error("Upload failed:", error);
+        file.status = "error";
+        toast.error("Failed to upload files.");
       }
-    };
+    }
 
-    simulateProgress();
+    setUploading(false);
+    toast.success("Files uploaded successfully!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: "colored",
+    });
   };
 
   return (
     <Layout>
       <div className="relative min-h-screen overflow-hidden text-white">
-        {/* Background Animation */}
         <div className="absolute inset-0 animate-pulse" />
 
         <div className="flex min-h-screen flex-col items-center justify-center px-4">

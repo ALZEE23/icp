@@ -29,33 +29,30 @@ const FileManager = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [contextMenu, setContextMenu] = useState({ visible: false, x: 0, y: 0, file: null });
+  const [fileTransferProgress, setFileTransferProgress] = useState(null);
+  const [contextMenu, setContextMenu] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    file: null,
+  });
 
   // Fetch files once on load
   useEffect(() => {
     const fetchUserFiles = async () => {
       setLoading(true);
       try {
-        const userFiles = await hello_backend.getUserFiles();
-        setFiles(userFiles.map(([id, data]) => ({
-          id,
-          name: `File_${id}`,
-          size: `${(data.length / 1024).toFixed(2)} KB`,
-          data,
-        })));
-      } catch (error) {
-        console.error("Gagal mengambil file:", error);
-      } finally {
-        setLoading(false);
-      }
-      setLoading(true);
-      try {
-        const userFiles = await hello_backend.getUserFiles();
+        const userFiles = await hello_backend.getFiles();
+        console.log("Fetched Files:", userFiles);
 
-        const formattedFiles = userFiles.map(([id, filename, fileData]) => ({
-          id,
-          name: `File_${filename}`,
-          size: `${(fileData.length / 1024).toFixed(2)} KB`,
+        if (!Array.isArray(userFiles)) {
+          throw new Error("Invalid data format received");
+        }
+
+        const formattedFiles = userFiles.map(({ name, size, fileType }) => ({
+          name,
+          size: `${(Number(size) / 1024).toFixed(2)} KB`,
+          fileType,
         }));
 
         setFiles(formattedFiles);
@@ -65,29 +62,55 @@ const FileManager = () => {
         setLoading(false);
       }
     };
+
     fetchUserFiles();
   }, []);
 
   // Reusable: Download file
-  const handleDownload = (file) => {
-    const blob = new Blob([new Uint8Array(file.data)], { type: "application/octet-stream" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = file.name;
-    link.click();
-    link.remove();
-    setContextMenu({ visible: false });
+  const handleDownload = async (file) => {
+    try {
+      const totalChunks = Number(await hello_backend.getTotalChunks(file));
+      const fileType = await hello_backend.getFileType(file)[0];
+      let chunks = [];
+
+      for (let i = 0; i < totalChunks; i++) {
+        const chunkBlob = await hello_backend.getFileChunk(file, BigInt(i));
+        if (chunkBlob) {
+          chunks.push(chunkBlob[0]);
+        } else {
+          throw new Error(`Failed to retrieve chunk ${i}`);
+        }
+
+        setFileTransferProgress((prev) => ({
+          ...prev,
+          progress: Math.floor(((i + 1) / totalChunks) * 100),
+        }));
+      }
+
+      const data = new Blob(chunks, { type: fileType });
+      const url = URL.createObjectURL(data);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = file;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download failed:", error);
+      setErrorMessage(`Failed to download ${file}: ${error.message}`);
+    } finally {
+      setFileTransferProgress(null);
+    }
   };
 
   // Reusable: Delete file
   const handleDelete = async (file) => {
     try {
-      await hello_backend.deleteFile(file.id);
-      setFiles(files.filter((f) => f.id !== file.id));
+      await hello_backend.deleteFile(file);
     } catch (error) {
       console.error("Gagal menghapus file:", error);
     } finally {
       setContextMenu({ visible: false });
+      setFiles((prevFiles) => prevFiles.filter((f) => f.name !== file));
     }
   };
 
@@ -139,7 +162,9 @@ const FileManager = () => {
             <div className="flex justify-center items-center py-12">
               <div className="flex flex-col items-center">
                 <div className="loader border-t-4 border-b-4 border-primary rounded-full w-12 h-12 animate-spin"></div>
-                <p className="mt-4 text-gray-400 text-sm">Loading your files...</p>
+                <p className="mt-4 text-gray-400 text-sm">
+                  Loading your files...
+                </p>
               </div>
             </div>
           ) : filteredFiles.length === 0 ? (
@@ -153,24 +178,35 @@ const FileManager = () => {
                 <table className="min-w-full divide-y divide-gray-700">
                   <thead className="bg-gray-900 sticky top-0 z-10">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">Name</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">Size</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">
+                        Name
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase">
+                        Size
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-gray-800 divide-y divide-gray-700">
                     {filteredFiles.map((file) => (
                       <tr
-                        key={file.id}
+                        key={file.name}
                         className="hover:bg-gray-700 cursor-pointer"
-                        onContextMenu={(e) => showContextMenu(e, file)}
-                        onTouchStart={(e) => handleTouchStart(e, file)}
+                        onContextMenu={(e) => showContextMenu(e, file.name)}
+                        onTouchStart={(e) => handleTouchStart(e, file.name)}
                         onTouchEnd={handleTouchEnd}
                       >
                         <td className="px-6 py-4 flex items-center whitespace-nowrap">
-                          <FileIcon fileType={file.name.split(".").pop().toLowerCase()} className="w-5 h-5 mr-2" />
-                          <span className="text-sm font-medium text-white">{file.name}</span>
+                          <FileIcon
+                            fileType={file.name.split(".").pop().toLowerCase()}
+                            className="w-5 h-5 mr-2"
+                          />
+                          <span className="text-sm font-medium text-white">
+                            {file.name}
+                          </span>
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-400">{file.size}</td>
+                        <td className="px-6 py-4 text-sm text-gray-400">
+                          {file.size}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -207,4 +243,3 @@ const FileManager = () => {
 };
 
 export default FileManager;
-    
