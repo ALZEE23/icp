@@ -1,8 +1,13 @@
 service : {
-  downloadFile: (nat) -> (opt blob);
-  getUserFiles: () -> (vec record {
-                             nat;
-                             blob;
-                           });
-  uploadFile: (nat, blob) -> (text);
+  checkFileExists: (text) -> (bool);
+  deleteFile: (text) -> (bool);
+  getFileChunk: (text, nat) -> (opt blob);
+  getFileType: (text) -> (opt text);
+  getFiles: () -> (vec record {
+                         fileType: text;
+                         name: text;
+                         size: nat;
+                       });
+  getTotalChunks: (text) -> (nat);
+  uploadFileChunk: (text, blob, nat, text) -> ();
 }

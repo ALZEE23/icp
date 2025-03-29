@@ -1,3 +1,0 @@
-service : {
-  saveData: (nat, text) -> (text);
-}

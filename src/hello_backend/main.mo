@@ -1,112 +1,126 @@
-import Text "mo:base/Text";
-import Nat "mo:base/Nat";
-// import Buffer "mo:base/Buffer";
-// import Trie "mo:base/Trie";
-// import TrieMap "mo:base/TrieMap";
-import Blob "mo:base/Blob";
-import Principal "mo:base/Principal";
+import Bool "mo:base/Bool";
 import Array "mo:base/Array";
+import Blob "mo:base/Blob";
+import HashMap "mo:map/Map";
+import { phash; thash } "mo:map/Map";
+import Iter "mo:base/Iter";
+import Nat "mo:base/Nat";
+import Principal "mo:base/Principal";
+import Text "mo:base/Text";
 import Option "mo:base/Option";
-// import Iter "mo:base/Iter";
-// import _Sha256 "mo:sha2/Sha256";
-// import Base16 "mo:base16/Base16";
 
 persistent actor StorageChain {
 
-  stable var fileStorage : [(Principal, [(Nat, Blob)])] = [];
-  stable var _userStorage : [(Principal, Nat)] = [];
-  stable var _userBalances : [(Principal, Nat)] = [];
-
-  public shared (msg) func uploadFile(fileId : Nat, fileData : Blob) : async Text {
-    let caller = msg.caller;
-    if (Array.size(Blob.toArray(fileData)) > 1_000_000) {
-      return "File too large";
-    };
-
-    //    let userFiles : ?(Principal, [(Nat, Blob)]) = Array.find<(Principal, [(Nat, Blob)])>(
-    //   fileStorage,
-    //   func (entry : (Principal, [(Nat, Blob)])) : Bool {
-    //     entry.0 == caller
-    //   }
-    // );
-
-    let existingFiles = Option.get(
-      Array.find(
-        fileStorage,
-        func(entry : (Principal, [(Nat, Blob)])) : Bool {
-          entry.0 == caller;
-        },
-      ),
-      (caller, []) // Jika tidak ditemukan, gunakan daftar kosong
-    );
-
-    // let updatedFiles = switch (userFiles) {
-    //   case (?(_, files)) { Array.append([(fileId, fileData)], files) };
-    //   case (null) { [(fileId, fileData)] };
-    // };
-
-    // fileStorage := Array.filter(fileStorage, func((p, _) : (Principal, [(Nat, Blob)])) : Bool { p != caller });
-
-    // fileStorage := Array.append([(caller, updatedFiles)], fileStorage);
-
-    let updatedFiles = Array.append([(fileId, fileData)], existingFiles.1);
-
-    fileStorage := Array.filter(
-      fileStorage,
-      func(entry : (Principal, [(Nat, Blob)])) : Bool {
-        not Principal.equal(entry.0, caller);
-      },
-    );
-
-    fileStorage := Array.append([(caller, updatedFiles)], fileStorage);
-
-    return "File uploaded";
+  // Define a data type for a file's chunks.
+  type FileChunk = {
+    chunk : Blob;
+    index : Nat;
   };
 
-  // public shared func downloadFile(fileId : Nat) : async (Nat, Blob) {
-  //   return fileStorage.get(fileId);
-  // };
+  // Define a data type for a file's data.
+  type File = {
+    name : Text;
+    chunks : [FileChunk];
+    totalSize : Nat;
+    fileType : Text;
+  };
 
-  public shared (msg) func getUserFiles() : async [(Nat, Blob)] {
-    let maybeUserFiles = Array.find(
-      fileStorage,
-      func(entry : (Principal, [(Nat, Blob)])) : Bool {
-        entry.0 == msg.caller;
-      },
-    );
+  // Define a data type for storing files associated with a user principal.
+  type UserFiles = HashMap.Map<Text, File>;
 
-    switch maybeUserFiles {
-      case (?(_, files)) { return files };
-      case null { return [] };
+  // HashMap to store the user data
+  private var files = HashMap.new<Principal, UserFiles>();
+
+  // Return files associated with a user's principal.
+  private func getUserFiles(user : Principal) : UserFiles {
+    switch (HashMap.get(files, phash, user)) {
+      case null {
+        let newFileMap = HashMap.new<Text, File>();
+        let _ = HashMap.put(files, phash, user, newFileMap);
+        newFileMap;
+      };
+      case (?existingFiles) existingFiles;
     };
   };
 
-  public shared (msg) func downloadFile(fileId : Nat) : async ?Blob {
-    let caller = msg.caller;
+  // Check if a file name already exists for the user.
+  public shared (msg) func checkFileExists(name : Text) : async Bool {
+    Option.isSome(HashMap.get(getUserFiles(msg.caller), thash, name));
+  };
 
+  // Upload a file in chunks.
+  public shared (msg) func uploadFileChunk(name : Text, chunk : Blob, index : Nat, fileType : Text) : async () {
+    let userFiles = getUserFiles(msg.caller);
+    let fileChunk = { chunk = chunk; index = index };
 
-    let userFiles = Option.get(
-      Array.find(
-        fileStorage,
-        func(entry : (Principal, [(Nat, Blob)])) : Bool {
-          entry.0 == caller;
-        },
-      ),
-      (caller, []) 
-    );
-
-    
-    let fileData = Array.find(
-      userFiles.1,
-      func(entry : (Nat, Blob)) : Bool {
-        entry.0 == fileId;
-      },
-    );
-
-    switch fileData {
-      case (?(_, blob)) { return ?blob }; 
-      case (null) { return null }; 
+    switch (HashMap.get(userFiles, thash, name)) {
+      case null {
+        let _ = HashMap.put(userFiles, thash, name, { name = name; chunks = [fileChunk]; totalSize = chunk.size(); fileType = fileType });
+      };
+      case (?existingFile) {
+        let updatedChunks = Array.append(existingFile.chunks, [fileChunk]);
+        let _ = HashMap.put(
+          userFiles,
+          thash,
+          name,
+          {
+            name = name;
+            chunks = updatedChunks;
+            totalSize = existingFile.totalSize + chunk.size();
+            fileType = fileType;
+          }
+        );
+      };
     };
   };
 
+  // Return list of files for a user.
+  public shared (msg) func getFiles() : async [{ name : Text; size : Nat; fileType : Text }] {
+    Iter.toArray(
+      Iter.map(
+        HashMap.vals(getUserFiles(msg.caller)),
+        func(file : File) : { name : Text; size : Nat; fileType : Text } {
+          {
+            name = file.name;
+            size = file.totalSize;
+            fileType = file.fileType;
+          };
+        }
+      )
+    );
+  };
+
+  // Return total chunks for a file
+  public shared (msg) func getTotalChunks(name : Text) : async Nat {
+    switch (HashMap.get(getUserFiles(msg.caller), thash, name)) {
+      case null 0;
+      case (?file) file.chunks.size();
+    };
+  };
+
+  // Return specific chunk for a file.
+  public shared (msg) func getFileChunk(name : Text, index : Nat) : async ?Blob {
+    switch (HashMap.get(getUserFiles(msg.caller), thash, name)) {
+      case null null;
+      case (?file) {
+        switch (Array.find(file.chunks, func(chunk : FileChunk) : Bool { chunk.index == index })) {
+          case null null;
+          case (?foundChunk) ?foundChunk.chunk;
+        };
+      };
+    };
+  };
+
+  // Get file's type.
+  public shared (msg) func getFileType(name : Text) : async ?Text {
+    switch (HashMap.get(getUserFiles(msg.caller), thash, name)) {
+      case null null;
+      case (?file) ?file.fileType;
+    };
+  };
+
+  // Delete a file.
+  public shared (msg) func deleteFile(name : Text) : async Bool {
+    Option.isSome(HashMap.remove(getUserFiles(msg.caller), thash, name));
+  };
 };
