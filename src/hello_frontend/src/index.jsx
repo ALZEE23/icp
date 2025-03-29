@@ -10,44 +10,45 @@ import NotFound from "~/pages/NotFound";
 import Sigin from "~/pages/Sigin";
 import "~/styles/index.css";
 import ProtectedRoute from "./components/ProtectedRoute";
+import MainLayout from "./components/layouts/MainLayout";
 import { AuthProvider } from "./contexts/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/">
-            <Route index element={<Home />} />
-            <Route path="signin" element={<Sigin />} />
-            <Route
-              path="/dashboard"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="*" element={<NotFound />} />
-            <Route
-              path="/managed-links"
-              element={
-                <ProtectedRoute>
-                  <ManagedLinks />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/file-upload"
-              element={
-                <ProtectedRoute>
-                  <FileUpload />
-                </ProtectedRoute>
-              }
-            />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
-  </React.StrictMode>
+    <React.StrictMode>
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<MainLayout />}>
+                        <Route index element={<Home />} />
+                        <Route path="signin" element={<Sigin />} />
+                    </Route>
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <ProtectedRoute>
+                                <Dashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/managed-links"
+                        element={
+                            <ProtectedRoute>
+                                <ManagedLinks />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/file-upload"
+                        element={
+                            <ProtectedRoute>
+                                <FileUpload />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
+    </React.StrictMode>,
 );
