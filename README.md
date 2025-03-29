@@ -61,3 +61,13 @@ Join the decentralized storage revolution and manage your files with the highest
 
 Would you like any modifications, or do you need an estimation tool for calculating storage costs based on ICP prices? 😊
 
+_____________________________________________________________________
+
+👥 Credits
+
+Developed by the Wedang Uwuh Team
+
+Alfarizi – Putera – Raha 
+______________________________________________________________________
+
+
