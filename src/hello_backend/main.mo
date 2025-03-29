@@ -123,4 +123,25 @@ persistent actor StorageChain {
   public shared (msg) func deleteFile(name : Text) : async Bool {
     Option.isSome(HashMap.remove(getUserFiles(msg.caller), thash, name));
   };
-};
+
+  public func transferFile(senderIdText : Text, receiverIdText : Text, fileName : Text) : async Bool {
+  let senderIdOpt = Nat.fromText(senderIdText);
+  let receiverIdOpt = Nat.fromText(receiverIdText);
+  
+  switch (senderIdOpt, receiverIdOpt) {
+    case (?senderId, ?receiverId) {
+      let file = files.get(senderId, fileName);
+      switch (file) {
+        case (null) { return false };
+        case (?fileData) {
+          files.put(receiverId, fileName, fileData);
+          files.delete(senderId, fileName);
+          return true;
+        };
+      };
+    };
+    case _ { return false; }; // Jika salah satu ID tidak valid
+  };
+  }
+}
+
