@@ -1,6 +1,22 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 
+@theme {
+    --animate-border: border 1s infinite;
+
+    @keyframes border {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+      }
+    }
+}
+
 /*
   The default border color has changed to `currentColor` in Tailwind CSS v4,
   so we've added these compatibility styles to make sure everything still
@@ -15,7 +31,7 @@
     ::before,
     ::backdrop,
     ::file-selector-button {
-        border-color: var(--color-gray-200, currentColor);
+        border-color: var(--color-zinc-200, currentColor);
     }
 
     .browser-warning {
@@ -27,18 +43,6 @@
         height: 100vh !important; /* Paksa pas layar */
         object-fit: cover; /* Hindari distorsi */
         overflow: hidden; /* Pastikan nggak bocor */
-    }
-    
-    @keyframes moving-border {
-        0% {
-            background-position: 0% 50%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
-        100% {
-            background-position: 0% 50%;
-      }
     }
       
     body {
