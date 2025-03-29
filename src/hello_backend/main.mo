@@ -124,24 +124,34 @@ persistent actor StorageChain {
     Option.isSome(HashMap.remove(getUserFiles(msg.caller), thash, name));
   };
 
-  public func transferFile(senderIdText : Text, receiverIdText : Text, fileName : Text) : async Bool {
-  let senderIdOpt = Nat.fromText(senderIdText);
-  let receiverIdOpt = Nat.fromText(receiverIdText);
-  
-  switch (senderIdOpt, receiverIdOpt) {
-    case (?senderId, ?receiverId) {
-      let file = files.get(senderId, fileName);
-      switch (file) {
-        case (null) { return false };
-        case (?fileData) {
-          files.put(receiverId, fileName, fileData);
-          files.delete(senderId, fileName);
-          return true;
-        };
-      };
-    };
-    case _ { return false; }; // Jika salah satu ID tidak valid
-  };
-  }
-}
+  // public shared (msg) func transferFile(receiverIdText : Text, fileName : Text) : async Bool {
+  // let receiverPrincipalOpt = Principal.fromText(receiverIdText);
+  // let senderPrincipal = msg.caller; // Pengirim adalah pengguna yang memanggil function
 
+  // switch (files.get(senderPrincipal)) {
+  //   case null { return false }; // Pengirim tidak ditemukan
+  //   case (?senderFiles) {
+  //     switch (senderFiles.get(fileName)) {
+  //       case null { return false }; 
+  //       case (?fileData) {
+  //         // Ambil atau buat UserFiles milik penerima
+  //         let receiverFiles = switch (files.get(receiverPrincipal)) {
+  //           case null { HashMap.new<Text, File>() };
+  //           case (?existingFiles) { existingFiles };
+  //         };
+
+  //         // Pindahkan file ke penerima
+  //         receiverFiles.put(fileName, fileData);
+  //         senderFiles.delete(fileName);
+
+  //         // Update HashMap utama
+  //         files.put(senderPrincipal, senderFiles);
+  //         files.put(receiverPrincipal, receiverFiles);
+
+  //         return true;
+  //       };
+  //     };
+  //   };
+  // };
+// }
+}
