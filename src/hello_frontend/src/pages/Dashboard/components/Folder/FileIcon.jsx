@@ -1,38 +1,28 @@
 import React from 'react';
-import { FileText, FileCode, FileImage, FileArchive, File } from 'lucide-react';
+import { FileText, FileCode, FileImage, FileArchive, FileVideo, FileAudio, File, Folder } from 'lucide-react';
 
-const FileIcon = ({ fileType }) => {
-const getIcon = () => {
-    switch (fileType) {
-        case 'txt':
-        case 'md':
-        case 'env':
-        case 'toml':
-            return <FileText className="w-6 h-6 mr-3" />;
-        case 'json':
-        case 'js':
-        case 'jsx':
-        case 'ts':
-        case 'tsx':
-            return <FileCode className="w-6 h-6 mr-3" />;
-        case 'png':
-        case 'jpg':
-        case 'jpeg':
-        case 'gif':
-            return <FileImage className="w-6 h-6 mr-3" />;
-        case 'zip':
-        case 'rar':
-            return <FileArchive className="w-6 h-6 mr-3" />;
-        default:
-            return <File className="w-6 h-6 mr-3" />;
-    }
+// Mapping ekstensi file ke icon (semua satu baris)
+const iconTypes = {
+  // Text & Dokumen
+  txt: FileText, md: FileText, env: FileText, toml: FileText, csv: FileText, doc: FileText, docx: FileText, pdf: FileText,
+  // Kode
+  json: FileCode, js: FileCode, jsx: FileCode, ts: FileCode, tsx: FileCode, html: FileCode, css: FileCode,
+  scss: FileCode, php: FileCode, py: FileCode, java: FileCode, c: FileCode, cpp: FileCode, rb: FileCode, go: FileCode, swift: FileCode, kt: FileCode,
+  // Gambar
+  png: FileImage, jpg: FileImage, jpeg: FileImage, gif: FileImage, bmp: FileImage, svg: FileImage, ico: FileImage, webp: FileImage,
+  // Arsip
+  zip: FileArchive, rar: FileArchive, tar: FileArchive, gz: FileArchive, '7z': FileArchive,
+  // Video
+  mp4: FileVideo, mkv: FileVideo, avi: FileVideo, mov: FileVideo, wmv: FileVideo, flv: FileVideo, webm: FileVideo,
+  // Audio
+  mp3: FileAudio, wav: FileAudio, ogg: FileAudio, flac: FileAudio, m4a: FileAudio,
+  // Default
+  default: Folder
 };
 
-  return (
-    <div className="file-icon-container flex items-center justify-center">
-      {getIcon()}
-    </div>
-  );
+const FileIcon = ({ fileType }) => {
+  const Icon = iconTypes[fileType.toLowerCase()] || iconTypes.default;
+  return <Icon className="w-6 h-6 mr-3" />;
 };
 
 export default FileIcon;
