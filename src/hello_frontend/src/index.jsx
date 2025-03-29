@@ -11,28 +11,30 @@ import { AuthProvider } from "~/contexts/AuthContext";
 import Dashboard from "~/pages/Dashboard/Dashboard";
 import FileUpload from "~/pages/Dashboard/FileUpload";
 import ManagedLinks from "~/pages/Dashboard/ManagedLinks";
+import FileManager from "~/pages/Dashboard/components/Folder/FileManager";
 import Home from "~/pages/Home";
 import NotFound from "~/pages/NotFound";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<MainLayout />}>
-            <Route index element={<Home />} />
-          </Route>
-          <Route element={<ProtectedRoute />}>
-            <Route element={<DashboardLayout />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/managed-links" element={<ManagedLinks />} />
-              <Route path="/file-upload" element={<FileUpload />} />
-            </Route>
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </AuthProvider>
-    <ToastContainer />
-  </React.StrictMode>
+    <React.StrictMode>
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<MainLayout />}>
+                        <Route index element={<Home />} />
+                    </Route>
+                    <Route element={<ProtectedRoute />}>
+                        <Route element={<DashboardLayout />}>
+                            <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/managed-links" element={<ManagedLinks />} />
+                            <Route path="/file-upload" element={<FileUpload />} />
+                            <Route path="/my-files" element={<FileManager />} />
+                        </Route>
+                    </Route>
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
+        <ToastContainer />
+    </React.StrictMode>,
 );

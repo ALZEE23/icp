@@ -89,7 +89,7 @@ export const DASHBOARD_NAV_LINKS = [
     {
         icon: Link,
         label: "Manage Your Links",
-        link: "/manage-links",
+        link: "/managed-links",
     },
     {
         icon: Folder,
