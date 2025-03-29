@@ -86,7 +86,7 @@ const Index = () => {
                     {HOW_IT_WORKS.map((feature) => (
                         <div
                             key={feature.title}
-                            className="relative overflow-hidden rounded-2xl border border-zinc-700/60 bg-zinc-950/60 p-6"
+                            className="relative overflow-hidden rounded-2xl border border-zinc-700/60 bg-zinc-900/60 p-6"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-cyan-400/10 opacity-20" />
                             <div className="relative z-10 mb-3 flex items-center gap-3">
@@ -108,7 +108,7 @@ const Index = () => {
 
             <section id="cta" className="flex justify-center px-24 py-16">
                 <div className="animate-border rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 p-[2px]">
-                    <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-zinc-950 p-8 text-center shadow-lg backdrop-blur-xl sm:max-w-xl md:max-w-2xl">
+                    <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-zinc-900 p-8 text-center shadow-lg backdrop-blur-xl sm:max-w-xl md:max-w-2xl">
                         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2 text-blue-400">
                             <Lock className="size-4" /> End-to-End Encryption
                         </div>

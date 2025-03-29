@@ -94,7 +94,7 @@ const MainLayout = () => {
             </div>
             <div className="drawer-side z-999">
                 <label htmlFor="sidebar" aria-label="close sidebar" className="drawer-overlay" />
-                <ul className="menu min-h-svh w-80 bg-zinc-950 p-4 shadow-lg backdrop-blur-lg">
+                <ul className="menu min-h-svh w-80 bg-zinc-900 p-4 shadow-lg backdrop-blur-lg">
                     {NAV_LINKS.map((link) => (
                         <li key={link.path}>
                             <Link
