@@ -1,9 +1,11 @@
-# `BlockStore 🚀🔗 `
+# `SecureVault 🚀🔗 `
 
 ---
 
-### **Welcome to BlockStore** 🚀🔗  
-**BlockStore** is a secure, decentralized, and permanent blockchain-based storage solution. Built on the **Internet Computer (IC)**, BlockStore allows users to store, access, and share files without relying on centralized servers.  
+### **Welcome to SecureVault** 🚀🔗  
+**SecureVault** is a secure, decentralized, and permanent blockchain-based storage solution. Built on the **Internet Computer (IC)**, SecureVault allows users to store, access, and share files without relying on centralized servers.  
+
+![Landing Page](./img/depan.png)
 
 ---
 
@@ -17,12 +19,14 @@
 
 ---
 
-### **🚀 How BlockStore Works**  
-1️⃣ **Upload File** – Users upload files through the BlockStore interface.  
+### **🚀 How SecureVault Works**  
+1️⃣ **Upload File** – Users upload files through the SecureVault interface.  
 2️⃣ **Compression & Encryption** – Files are compressed and optionally encrypted before storage.  
 3️⃣ **On-Chain Storage** – Files are stored on the blockchain using canister smart contracts.  
 4️⃣ **Access via Hash** – Users receive a **unique hash** to retrieve their files anytime.  
 5️⃣ **Download & Decompression** – Files can be downloaded and decrypted when needed.  
+
+![Dashboard](./img/dashboard.png)
 
 ---
 
@@ -50,9 +54,10 @@ For users who need **exclusive storage** with higher performance and dedicated r
 
 ---
 
-### **🚀 Start Using BlockStore Today!**  
+### **🚀 Start Using SecureVault Today!**  
 Join the decentralized storage revolution and manage your files with the highest level of security! 🔥  
 
 ---
 
 Would you like any modifications, or do you need an estimation tool for calculating storage costs based on ICP prices? 😊
+
