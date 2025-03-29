@@ -1,9 +1,19 @@
 import { Facebook, Instagram, Menu, ShieldCheck, Twitter } from "lucide-react";
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
-import { FOOTER_LINKS, NAV_LINKS } from "../../lib/constant";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+
+import { useAuth } from "~/contexts/AuthContext";
+import { FOOTER_LINKS, NAV_LINKS } from "~/lib/constant";
 
 const MainLayout = () => {
+    const { login } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogin = async () => {
+        await login();
+        navigate("/dashboard");
+    };
+
     return (
         <div className="drawer drawer-end">
             <input type="checkbox" id="sidebar" className="drawer-toggle" />
@@ -29,12 +39,12 @@ const MainLayout = () => {
                         ))}
                     </ul>
                     <div className="navbar-end">
-                        <Link
-                            to="/signin"
+                        <button
+                            onClick={handleLogin}
                             className="hidden rounded-full border border-white px-5 py-1.5 font-semibold text-sm transition-colors hover:bg-white/30 lg:block"
                         >
                             Login
-                        </Link>
+                        </button>
                         <div className="flex-none lg:hidden">
                             <label
                                 htmlFor="sidebar"
@@ -46,9 +56,11 @@ const MainLayout = () => {
                         </div>
                     </div>
                 </header>
+
                 <main>
                     <Outlet />
                 </main>
+
                 <footer className="footer sm:footer-horizontal relative overflow-hidden p-10 pb-24">
                     <aside>
                         <Link to="" className="flex items-center gap-2">

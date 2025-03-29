@@ -2,16 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import "~/styles/index.css";
+
+import MainLayout from "~/components/layouts/MainLayout";
+import ProtectedRoute from "~/components/layouts/ProtectedRoute";
+import { AuthProvider } from "~/contexts/AuthContext";
 import FileUpload from "~/pages/Dashboard/FileUpload";
 import ManagedLinks from "~/pages/Dashboard/ManagedLinks";
 import Dashboard from "~/pages/Dashboard/dashboard";
 import Home from "~/pages/Home";
 import NotFound from "~/pages/NotFound";
-import Sigin from "~/pages/Sigin";
-import "~/styles/index.css";
-import ProtectedRoute from "./components/ProtectedRoute";
-import MainLayout from "./components/layouts/MainLayout";
-import { AuthProvider } from "./contexts/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
@@ -20,32 +20,12 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                 <Routes>
                     <Route path="/" element={<MainLayout />}>
                         <Route index element={<Home />} />
-                        <Route path="signin" element={<Sigin />} />
                     </Route>
-                    <Route
-                        path="/dashboard"
-                        element={
-                            <ProtectedRoute>
-                                <Dashboard />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/managed-links"
-                        element={
-                            <ProtectedRoute>
-                                <ManagedLinks />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/file-upload"
-                        element={
-                            <ProtectedRoute>
-                                <FileUpload />
-                            </ProtectedRoute>
-                        }
-                    />
+                    <Route element={<ProtectedRoute />}>
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/managed-links" element={<ManagedLinks />} />
+                        <Route path="/file-upload" element={<FileUpload />} />
+                    </Route>
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
