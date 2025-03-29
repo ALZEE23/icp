@@ -36,12 +36,12 @@ const FileCard = ({ type, title, used, files, size }) => {
             case "downloads":
                 return "bg-indigo-500";
             default:
-                return "bg-gray-500";
+                return "bg-zinc-500";
         }
     };
 
     return (
-        <div className="file-card animate-scale-in rounded-lg border border-gray-800 bg-[#0D0D0D] p-4 shadow-blue-500/30 shadow-lg transition hover:shadow-blue-400/50">
+        <div className="file-card animate-scale-in rounded-lg border border-zinc-800 bg-zinc-950 p-4 shadow-blue-500/30 shadow-lg transition hover:shadow-blue-400/50">
             {/* Top Section */}
             <div className="flex items-center justify-between">
                 {/* Icon with Background */}
@@ -49,20 +49,20 @@ const FileCard = ({ type, title, used, files, size }) => {
                     {getIcon()}
                 </div>
                 {/* More Options Button */}
-                <button className="rounded-full p-1 transition hover:bg-gray-800">
-                    <MoreVertical className="h-5 w-5 text-gray-400" />
+                <button className="rounded-full p-1 transition hover:bg-zinc-800">
+                    <MoreVertical className="h-5 w-5 text-zinc-400" />
                 </button>
             </div>
 
             {/* Title & Storage Info */}
             <div className="mt-3">
                 <h3 className="font-medium text-white">{title}</h3>
-                <p className="text-gray-400 text-sm">{used} Used</p>
+                <p className="text-sm text-zinc-400">{used} Used</p>
             </div>
 
             {/* Bottom Section */}
             <div className="mt-3 flex items-end justify-between">
-                <span className="text-gray-500 text-xs">{files} files</span>
+                <span className="text-xs text-zinc-500">{files} files</span>
                 <span className="font-semibold text-blue-400 text-sm">{size} GB</span>
             </div>
         </div>

@@ -121,7 +121,7 @@ const ManagedLinks = () => {
             <div className="container mx-auto px-4 py-8">
                 <div className="mb-8">
                     <h1 className="mb-2 font-bold text-3xl">Managed Links & Access</h1>
-                    <p className="text-gray-500">
+                    <p className="text-zinc-500">
                         Create and manage shared links and access tokens for your folders.
                     </p>
                 </div>

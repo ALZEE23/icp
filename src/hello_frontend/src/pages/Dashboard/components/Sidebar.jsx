@@ -38,7 +38,7 @@ const SidebarItem = ({
                 className={`flex w-full items-center rounded-lg px-3 py-2 text-left transition-all ${
                     isActive
                         ? "bg-blue-500/20 text-blue-400 shadow-blue-500/30 shadow-md"
-                        : "from-blue-500/20 to-purple-500/20 text-gray-400 hover:bg-gradient-to-r"
+                        : "from-blue-500/20 to-purple-500/20 text-zinc-400 hover:bg-gradient-to-r"
                 }
         `}
             >
@@ -114,7 +114,7 @@ const Sidebar = () => {
                 </SidebarItem>
 
                 <div className="mt-6 mb-2">
-                    <h3 className="mb-2 px-3 font-medium text-gray-500 text-xs uppercase">
+                    <h3 className="mb-2 px-3 font-medium text-xs text-zinc-500 uppercase">
                         Categories
                     </h3>
 

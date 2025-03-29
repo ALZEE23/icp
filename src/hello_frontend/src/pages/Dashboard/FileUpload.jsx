@@ -1,11 +1,11 @@
+import { Actor, HttpAgent } from "@dfinity/agent";
 import { Check, FileUp, Plus, Upload, X } from "lucide-react";
 import React, { useState } from "react";
-import Layout from "../../pages/Dashboard/components/layout";
-import { Actor, HttpAgent } from "@dfinity/agent";
 import {
   canisterId,
   createActor,
 } from "../../../../declarations/hello_backend";
+import Layout from "../../pages/Dashboard/components/layout";
 
 const agent = new HttpAgent();
 const backend = createActor(canisterId, { agent });
@@ -117,7 +117,7 @@ const FileUpload = () => {
             <h1 className="mb-4 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text font-extrabold text-4xl text-transparent drop-shadow-lg">
               Secure File Upload
             </h1>
-            <p className="mb-6 text-gray-400">
+            <p className="mb-6 text-zinc-400">
               Drag & drop or select files to upload securely to the cloud.
             </p>
 
@@ -125,7 +125,7 @@ const FileUpload = () => {
               className={`flex h-64 flex-col items-center justify-center rounded-lg border-4 p-8 transition-all ${
                 isDragging
                   ? "border-cyan-400/50 bg-cyan-900/20 shadow-cyan-500/20"
-                  : "border-gray-600 bg-[#0D131F]/60"
+                  : "border-zinc-600 bg-[#0D131F]/60"
               }`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
@@ -135,7 +135,7 @@ const FileUpload = () => {
               <h3 className="mb-2 font-medium text-xl">
                 Drag & Drop Files Here
               </h3>
-              <p className="mb-4 text-gray-400">Or click to browse files</p>
+              <p className="mb-4 text-zinc-400">Or click to browse files</p>
               <label className="cursor-pointer rounded-lg bg-gradient-to-r from-cyan-400 to-purple-400 px-6 py-3 font-medium text-white shadow-lg transition-shadow hover:shadow-cyan-400/50">
                 <input
                   type="file"
@@ -157,9 +157,9 @@ const FileUpload = () => {
                   {files.map((file) => (
                     <div
                       key={file.id}
-                      className="flex items-center rounded-lg border border-gray-700 bg-[#0D131F]/80 p-4 shadow-md"
+                      className="flex items-center rounded-lg border border-zinc-700 bg-[#0D131F]/80 p-4 shadow-md"
                     >
-                      <div className="mr-4 flex h-12 w-12 items-center justify-center rounded bg-gray-800">
+                      <div className="mr-4 flex h-12 w-12 items-center justify-center rounded bg-zinc-800">
                         {file.type.startsWith("image/") ? (
                           <img
                             src={file.preview}
@@ -173,7 +173,7 @@ const FileUpload = () => {
 
                       <div className="flex-1">
                         <p className="truncate font-medium">{file.name}</p>
-                        <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-gray-800">
+                        <div className="mt-1 h-2 w-full overflow-hidden rounded-full bg-zinc-800">
                           <div
                             className="h-2 bg-gradient-to-r from-cyan-400 to-purple-500"
                             style={{ width: `${file.progress}%` }}

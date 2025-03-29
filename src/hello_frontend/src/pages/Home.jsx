@@ -43,11 +43,11 @@ const Index = () => {
                     {APP_FEATURES.map((feature) => (
                         <div
                             key={feature.title}
-                            className="grid place-items-center rounded-lg border border-gray-700 bg-gray-800 p-6 text-center shadow-md"
+                            className="grid place-items-center rounded-lg border border-zinc-700 bg-zinc-800 p-6 text-center shadow-md"
                         >
                             <feature.icon className="mb-4 size-12 text-blue-400" />
                             <h3 className="mb-2 font-semibold text-xl">{feature.title}</h3>
-                            <p className="text-gray-300">{feature.description}</p>
+                            <p className="text-zinc-300">{feature.description}</p>
                         </div>
                     ))}
                 </div>
@@ -65,20 +65,20 @@ const Index = () => {
                         <div className="-translate-y-1/2 -translate-x-1/2 absolute top-1/2 left-1/2 z-1 size-32 rounded-full bg-blue-600/60 md:size-52" />
                     </div>
 
-                    <div className="absolute top-10 left-1/3 z-2 rounded-lg bg-gray-800/80 p-3 text-xs shadow-lg backdrop-blur-md">
+                    <div className="absolute top-10 left-1/3 z-2 rounded-lg bg-zinc-800/80 p-3 text-xs shadow-lg backdrop-blur-md">
                         <div className="mb-1 flex items-center gap-2">
-                            <div className="size-4 rounded-full bg-gray-400" />
+                            <div className="size-4 rounded-full bg-zinc-400" />
                             <span>mark-s/website-tweaks</span>
                         </div>
-                        <div className="text-[10px] text-gray-400">Amsterdam, Netherlands</div>
+                        <div className="text-[10px] text-zinc-400">Amsterdam, Netherlands</div>
                     </div>
 
-                    <div className="absolute right-1/3 bottom-10 z-2 rounded-lg bg-gray-800/80 p-3 text-xs shadow-lg backdrop-blur-md">
+                    <div className="absolute right-1/3 bottom-10 z-2 rounded-lg bg-zinc-800/80 p-3 text-xs shadow-lg backdrop-blur-md">
                         <div className="mb-1 flex items-center gap-2">
-                            <div className="size-4 rounded-full bg-gray-400" />
+                            <div className="size-4 rounded-full bg-zinc-400" />
                             <span>eric-w/freeform-canvas</span>
                         </div>
-                        <div className="text-[10px] text-gray-400">London, UK</div>
+                        <div className="text-[10px] text-zinc-400">London, UK</div>
                     </div>
                 </div>
 
@@ -86,7 +86,7 @@ const Index = () => {
                     {HOW_IT_WORKS.map((feature) => (
                         <div
                             key={feature.title}
-                            className="relative overflow-hidden rounded-2xl border border-gray-700/60 bg-gray-900/60 p-6"
+                            className="relative overflow-hidden rounded-2xl border border-zinc-700/60 bg-zinc-950/60 p-6"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-transparent to-cyan-400/10 opacity-20" />
                             <div className="relative z-10 mb-3 flex items-center gap-3">
@@ -97,7 +97,7 @@ const Index = () => {
                                     {feature.title}
                                 </h3>
                             </div>
-                            <p className="relative z-10 text-gray-400 text-sm">
+                            <p className="relative z-10 text-sm text-zinc-400">
                                 {feature.description}
                             </p>
                             <div className="absolute right-2 bottom-2 size-6 rounded-full bg-cyan-500/40 blur-xl" />
@@ -108,7 +108,7 @@ const Index = () => {
 
             <section id="cta" className="flex justify-center px-24 py-16">
                 <div className="animate-border rounded-2xl bg-gradient-to-r from-blue-500 via-purple-500 to-blue-500 p-[2px]">
-                    <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-gray-900 p-8 text-center shadow-lg backdrop-blur-xl sm:max-w-xl md:max-w-2xl">
+                    <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-zinc-950 p-8 text-center shadow-lg backdrop-blur-xl sm:max-w-xl md:max-w-2xl">
                         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2 text-blue-400">
                             <Lock className="size-4" /> End-to-End Encryption
                         </div>

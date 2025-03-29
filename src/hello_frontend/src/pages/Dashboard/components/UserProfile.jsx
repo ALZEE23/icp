@@ -9,13 +9,12 @@ const UserProfile = () => {
     const toggleDropdown = () => {
         setIsDropdownOpen(!isDropdownOpen);
     };
-    
 
     return (
         <div className="relative">
             <button
                 onClick={toggleDropdown}
-                className="flex items-center space-x-2 rounded-full p-2 transition-colors hover:bg-gray-700"
+                className="flex items-center space-x-2 rounded-full p-2 transition-colors hover:bg-zinc-700"
                 aria-expanded={isDropdownOpen}
             >
                 <div className="relative flex-shrink-0">
@@ -27,40 +26,40 @@ const UserProfile = () => {
 
                 <div className="flex hidden flex-col items-start text-left sm:block">
                     <span className="font-medium text-sm">John Doe</span>
-                    <span className="text-gray-500 text-xs">john@example.com</span>
+                    <span className="text-xs text-zinc-500">john@example.com</span>
                 </div>
 
-                <ChevronDown className="hidden h-4 w-4 text-gray-500 sm:block" />
+                <ChevronDown className="hidden h-4 w-4 text-zinc-500 sm:block" />
             </button>
 
             {isDropdownOpen && (
-                <div className="absolute right-0 z-10 mt-2 w-56 rounded-lg bg-[#0d0d0d] py-2 shadow-lg">
+                <div className="absolute right-0 z-10 mt-2 w-56 rounded-lg bg-zinc-950 py-2 shadow-lg">
                     <div className="px-4 py-2 sm:hidden">
                         <p className="font-medium text-sm">John Doe</p>
-                        <p className="text-gray-500 text-xs">john@example.com</p>
+                        <p className="text-xs text-zinc-500">john@example.com</p>
                     </div>
 
                     <a
                         href="#"
-                        className="flex items-center px-4 py-2 text-gray-700 text-sm hover:bg-gray-100"
+                        className="flex items-center px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-100"
                     >
-                        <UserRound className="mr-3 h-4 w-4 text-gray-500" />
+                        <UserRound className="mr-3 h-4 w-4 text-zinc-500" />
                         Profile
                     </a>
 
                     <a
                         href="#"
-                        className="flex items-center px-4 py-2 text-gray-700 text-sm hover:bg-gray-100"
+                        className="flex items-center px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-100"
                     >
-                        <Settings className="mr-3 h-4 w-4 text-gray-500" />
+                        <Settings className="mr-3 h-4 w-4 text-zinc-500" />
                         Settings
                     </a>
 
-                    <div className="my-1 border-gray-800 border-t"></div>
+                    <div className="my-1 border-zinc-800 border-t"></div>
 
                     <a
                         href="/signin"
-                        className="flex items-center px-4 py-2 text-red-600 text-sm hover:bg-gray-100"
+                        className="flex items-center px-4 py-2 text-red-600 text-sm hover:bg-zinc-100"
                     >
                         <LogOut className="mr-3 h-4 w-4" />
                         Sign out

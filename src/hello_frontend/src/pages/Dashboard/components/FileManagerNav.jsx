@@ -5,7 +5,7 @@ import UserProfile from "./UserProfile";
 
 const FileManagerNav = ({ toggleSidebar }) => {
     return (
-        <div className="flex w-full animate-fade-in items-center justify-between bg-[#121212] px-6 py-3 shadow-blue-500/10 shadow-md">
+        <div className="flex w-full animate-fade-in items-center justify-between bg-zinc-950 px-6 py-3 shadow-blue-500/10 shadow-md">
             {/* Left: Menu & Title */}
             <div className="flex items-center space-x-4">
                 <button
@@ -20,11 +20,11 @@ const FileManagerNav = ({ toggleSidebar }) => {
 
             {/* Right: Breadcrumb & Profile */}
             <div className="flex items-center space-x-3">
-                <div className="hidden items-center text-gray-400 text-sm sm:flex">
+                <div className="hidden items-center text-sm text-zinc-400 sm:flex">
                     <Link to="/" className="transition-all hover:text-blue-400">
                         Home
                     </Link>
-                    <ChevronRight className="mx-1 h-4 w-4 text-gray-500" />
+                    <ChevronRight className="mx-1 h-4 w-4 text-zinc-500" />
                     <span className="text-white">File Manager</span>
                 </div>
                 <UserProfile />
