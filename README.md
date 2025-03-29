@@ -5,7 +5,7 @@
 ### **Welcome to SecureVault** 🚀🔗  
 **SecureVault** is a secure, decentralized, and permanent blockchain-based storage solution. Built on the **Internet Computer (IC)**, SecureVault allows users to store, access, and share files without relying on centralized servers.  
 
-![Landing Page](path/to/landing-page-image.jpg)
+![Landing Page](./img/depan.png)
 
 ---
 
@@ -26,7 +26,7 @@
 4️⃣ **Access via Hash** – Users receive a **unique hash** to retrieve their files anytime.  
 5️⃣ **Download & Decompression** – Files can be downloaded and decrypted when needed.  
 
-![Dashboard](path/to/dashboard-image.jpg)
+![Dashboard](./img/dashboard.png)
 
 ---
 
