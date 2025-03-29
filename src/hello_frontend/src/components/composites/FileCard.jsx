@@ -23,7 +23,7 @@ const FileCard = ({ type, title, files, size }) => {
 
             <footer className="mt-4 flex items-end justify-between text-xs">
                 <span className="text-zinc-500">{files} files</span>
-                <span className="font-semibold text-blue-400">{size} GB</span>
+                <span className="font-semibold text-blue-400">{size}</span>
             </footer>
         </article>
     );

@@ -1,34 +1,13 @@
 import { Download, FolderX, Search, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+
 import { hello_backend } from "../../../../../../declarations/hello_backend";
 import FileIcon from "./FileIcon";
-
-// const folders = [
-//   { id: 1, name: ".dfx", size: "4 KB" },
-//   { id: 2, name: ".github", size: "12 KB" },
-//   { id: 3, name: ".mops", size: "8 KB" },
-//   { id: 4, name: "deps", size: "20 KB" },
-//   { id: 5, name: "node_modules", size: "150 MB" },
-//   { id: 6, name: "src", size: "50 KB" },
-//   { id: 7, name: "test", size: "10 KB" },
-// ];
-
-// const files = [
-//   { id: 1, name: ".env", size: "1 KB" },
-//   { id: 2, name: ".gitignore", size: "1 KB" },
-//   { id: 3, name: "dfx.json", size: "2 KB" },
-//   { id: 4, name: "mops.toml", size: "1 KB" },
-//   { id: 5, name: "package.json", size: "3 KB" },
-//   { id: 6, name: "package-lock.json", size: "200 KB" },
-//   { id: 7, name: "README.md", size: "5 KB" },
-//   { id: 8, name: "tsconfig.json", size: "2 KB" },
-// ];
 
 const FileManager = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [files, setFiles] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [fileTransferProgress, setFileTransferProgress] = useState(null);
     const [contextMenu, setContextMenu] = useState({
         visible: false,
         x: 0,
@@ -36,7 +15,6 @@ const FileManager = () => {
         file: null,
     });
 
-    // Fetch files once on load
     useEffect(() => {
         const fetchUserFiles = async () => {
             setLoading(true);
@@ -65,7 +43,6 @@ const FileManager = () => {
         fetchUserFiles();
     }, []);
 
-    // Reusable: Download file
     const handleDownload = async (file) => {
         try {
             const totalChunks = Number(await hello_backend.getTotalChunks(file));
@@ -79,11 +56,6 @@ const FileManager = () => {
                 } else {
                     throw new Error(`Failed to retrieve chunk ${i}`);
                 }
-
-                setFileTransferProgress((prev) => ({
-                    ...prev,
-                    progress: Math.floor(((i + 1) / totalChunks) * 100),
-                }));
             }
 
             const data = new Blob(chunks, { type: fileType });
@@ -96,12 +68,9 @@ const FileManager = () => {
         } catch (error) {
             console.error("Download failed:", error);
             setErrorMessage(`Failed to download ${file}: ${error.message}`);
-        } finally {
-            setFileTransferProgress(null);
         }
     };
 
-    // Reusable: Delete file
     const handleDelete = async (file) => {
         try {
             await hello_backend.deleteFile(file);
@@ -113,13 +82,11 @@ const FileManager = () => {
         }
     };
 
-    // Show context menu
     const showContextMenu = (e, file) => {
         e.preventDefault();
         setContextMenu({ visible: true, x: e.clientX, y: e.clientY, file });
     };
 
-    // Long press for mobile
     let touchTimer;
     const handleTouchStart = (e, file) => {
         touchTimer = setTimeout(() => {
@@ -129,7 +96,7 @@ const FileManager = () => {
                 y: e.touches[0].clientY,
                 file,
             });
-        }, 800); // 800ms long press
+        }, 800);
     };
     const handleTouchEnd = () => clearTimeout(touchTimer);
 
@@ -137,105 +104,96 @@ const FileManager = () => {
         file.name.toLowerCase().includes(searchQuery.toLowerCase()),
     );
 
-    // Hide context menu on click
     const handleClickOutside = () => setContextMenu({ visible: false });
 
     return (
-        <div className="flex min-h-screen bg-black" onClick={handleClickOutside}>
-            <div className="container mx-auto px-4 py-6">
-                {/* Search Bar */}
-                <div className="relative mb-4 w-full sm:w-96">
-                    <input
-                        type="text"
-                        placeholder="Search files and folders..."
-                        className="w-full rounded-lg border border-gray-700 bg-gray-900 py-2 pr-4 pl-10 text-white focus:ring-2 focus:ring-primary"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    <Search className="absolute top-2.5 left-3 h-5 w-5 text-gray-400" />
-                </div>
-
-                {/* Loading State */}
-                {loading ? (
-                    <div className="flex items-center justify-center py-12">
-                        <div className="flex flex-col items-center">
-                            <div className="loader h-12 w-12 animate-spin rounded-full border-primary border-t-4 border-b-4" />
-                            <p className="mt-4 text-gray-400 text-sm">Loading your files...</p>
-                        </div>
-                    </div>
-                ) : filteredFiles.length === 0 ? (
-                    <div className="mt-10 text-center text-white">
-                        <FolderX className="mx-auto mb-4 h-12 w-12" />
-                        <p>No files found</p>
-                    </div>
-                ) : (
-                    <div className="h-[800px] overflow-hidden rounded-lg border border-gray-700 bg-gray-900">
-                        <div className="h-full overflow-auto">
-                            <table className="min-w-full divide-y divide-gray-700">
-                                <thead className="sticky top-0 z-10 bg-gray-900">
-                                    <tr>
-                                        <th className="px-6 py-3 text-left font-medium text-gray-300 text-xs uppercase">
-                                            Name
-                                        </th>
-                                        <th className="px-6 py-3 text-left font-medium text-gray-300 text-xs uppercase">
-                                            Size
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-700 bg-gray-800">
-                                    {filteredFiles.map((file) => (
-                                        <tr
-                                            key={file.name}
-                                            className="cursor-pointer hover:bg-gray-700"
-                                            onContextMenu={(e) => showContextMenu(e, file.name)}
-                                            onTouchStart={(e) => handleTouchStart(e, file.name)}
-                                            onTouchEnd={handleTouchEnd}
-                                        >
-                                            <td className="flex items-center whitespace-nowrap px-6 py-4">
-                                                <FileIcon
-                                                    fileType={file.name
-                                                        .split(".")
-                                                        .pop()
-                                                        .toLowerCase()}
-                                                    className="mr-2 h-5 w-5"
-                                                />
-                                                <span className="font-medium text-sm text-white">
-                                                    {file.name}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-4 text-gray-400 text-sm">
-                                                {file.size}
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                )}
-
-                {/* Context Menu */}
-                {contextMenu.visible && (
-                    <div
-                        className="fixed z-50 rounded-lg bg-gray-800 p-3 shadow-lg"
-                        style={{ top: contextMenu.y, left: contextMenu.x }}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <button
-                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-white hover:bg-gray-700"
-                            onClick={() => handleDownload(contextMenu.file)}
-                        >
-                            <Download className="h-5 w-5" /> Download
-                        </button>
-                        <button
-                            className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-white hover:bg-red-600"
-                            onClick={() => handleDelete(contextMenu.file)}
-                        >
-                            <Trash2 className="h-5 w-5" /> Delete
-                        </button>
-                    </div>
-                )}
+        <div onClick={handleClickOutside}>
+            <div className="relative mb-4 w-full sm:w-96">
+                <input
+                    type="text"
+                    placeholder="Search files and folders..."
+                    className="w-full rounded border border-zinc-700 bg-zinc-800 py-2 pr-4 pl-10 text-white focus:ring-2 focus:ring-primary"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <Search className="absolute top-2.5 left-3 size-5 text-zinc-400" />
             </div>
+
+            {loading ? (
+                <div className="flex items-center justify-center py-12">
+                    <div className="flex flex-col items-center">
+                        <div className="size-12 animate-spin rounded-full border-primary border-y-4" />
+                        <p className="mt-4 text-sm text-zinc-400">Loading your files...</p>
+                    </div>
+                </div>
+            ) : filteredFiles.length === 0 ? (
+                <div className="mx-auto mt-10 text-center text-white">
+                    <FolderX className="mx-auto mb-4 h-12 w-12" />
+                    <p>No files found</p>
+                </div>
+            ) : (
+                <div className="h-[800px] overflow-hidden rounded-lg border border-zinc-700 bg-zinc-900">
+                    <div className="h-full overflow-auto">
+                        <table className="min-w-full divide-y divide-zinc-700">
+                            <thead className="sticky top-0 z-10 bg-zinc-900">
+                                <tr>
+                                    <th className="px-6 py-3 text-left font-medium text-xs text-zinc-300 uppercase">
+                                        Name
+                                    </th>
+                                    <th className="px-6 py-3 text-left font-medium text-xs text-zinc-300 uppercase">
+                                        Size
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-zinc-700 bg-zinc-800">
+                                {filteredFiles.map((file) => (
+                                    <tr
+                                        key={file.name}
+                                        className="cursor-pointer hover:bg-zinc-700"
+                                        onContextMenu={(e) => showContextMenu(e, file.name)}
+                                        onTouchStart={(e) => handleTouchStart(e, file.name)}
+                                        onTouchEnd={handleTouchEnd}
+                                    >
+                                        <td className="flex items-center whitespace-nowrap px-6 py-4">
+                                            <FileIcon
+                                                fileType={file.name.split(".").pop().toLowerCase()}
+                                                className="mr-2 h-5 w-5"
+                                            />
+                                            <span className="font-medium text-sm text-white">
+                                                {file.name}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-sm text-zinc-400">
+                                            {file.size}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
+
+            {contextMenu.visible && (
+                <div
+                    className="fixed z-50 rounded-lg bg-zinc-800 p-3 shadow-lg"
+                    style={{ top: contextMenu.y, left: contextMenu.x }}
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <button
+                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-white hover:bg-zinc-700"
+                        onClick={() => handleDownload(contextMenu.file)}
+                    >
+                        <Download className="h-5 w-5" /> Download
+                    </button>
+                    <button
+                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-white hover:bg-red-600"
+                        onClick={() => handleDelete(contextMenu.file)}
+                    >
+                        <Trash2 className="h-5 w-5" /> Delete
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
