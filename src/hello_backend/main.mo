@@ -68,14 +68,18 @@ persistent actor StorageChain {
             chunks = updatedChunks;
             totalSize = existingFile.totalSize + chunk.size();
             fileType = fileType;
-          }
+          },
         );
       };
     };
   };
 
   // Return list of files for a user.
-  public shared (msg) func getFiles() : async [{ name : Text; size : Nat; fileType : Text }] {
+  public shared (msg) func getFiles() : async [{
+    name : Text;
+    size : Nat;
+    fileType : Text;
+  }] {
     Iter.toArray(
       Iter.map(
         HashMap.vals(getUserFiles(msg.caller)),
@@ -85,7 +89,7 @@ persistent actor StorageChain {
             size = file.totalSize;
             fileType = file.fileType;
           };
-        }
+        },
       )
     );
   };
@@ -124,34 +128,19 @@ persistent actor StorageChain {
     Option.isSome(HashMap.remove(getUserFiles(msg.caller), thash, name));
   };
 
-  // public shared (msg) func transferFile(receiverIdText : Text, fileName : Text) : async Bool {
-  // let receiverPrincipalOpt = Principal.fromText(receiverIdText);
-  // let senderPrincipal = msg.caller; // Pengirim adalah pengguna yang memanggil function
+  public shared (msg) func transferFile(receiverIdText : Text, fileName : Text) : async Bool {
+    let receiverPrincipal = Principal.fromText(receiverIdText);
 
-  // switch (files.get(senderPrincipal)) {
-  //   case null { return false }; // Pengirim tidak ditemukan
-  //   case (?senderFiles) {
-  //     switch (senderFiles.get(fileName)) {
-  //       case null { return false }; 
-  //       case (?fileData) {
-  //         // Ambil atau buat UserFiles milik penerima
-  //         let receiverFiles = switch (files.get(receiverPrincipal)) {
-  //           case null { HashMap.new<Text, File>() };
-  //           case (?existingFiles) { existingFiles };
-  //         };
+    let senderFiles = getUserFiles(msg.caller);
+    let receiverFiles = getUserFiles(receiverPrincipal);
 
-  //         // Pindahkan file ke penerima
-  //         receiverFiles.put(fileName, fileData);
-  //         senderFiles.delete(fileName);
-
-  //         // Update HashMap utama
-  //         files.put(senderPrincipal, senderFiles);
-  //         files.put(receiverPrincipal, receiverFiles);
-
-  //         return true;
-  //       };
-  //     };
-  //   };
-  // };
-// }
-}
+    switch (HashMap.get(senderFiles, thash, fileName)) {
+      case (?fileData) {
+        let _ = HashMap.put(receiverFiles, thash, fileName, fileData);
+        let _ = HashMap.remove(senderFiles, thash, fileName);
+        return true;
+      };
+      case null { return false };
+    };
+  };
+};
