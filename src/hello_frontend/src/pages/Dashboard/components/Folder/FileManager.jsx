@@ -29,6 +29,7 @@ const FileManager = () => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fileTransferProgress, setFileTransferProgress] = useState(null);
+  const [fileName, setFileName] = useState("");
   const [contextMenu, setContextMenu] = useState({
     visible: false,
     x: 0,
@@ -113,10 +114,27 @@ const FileManager = () => {
     }
   };
 
-  // Modal 
+  // Modal
+  const handleTransfer = async (receiver, file) => {
+    try {
+      const result = await hello_backend.transferFile(receiver, file);
+      console.log("Transfer result:", result);
+      if (result) {
+        alert("File transfer successful!");
+      } else {
+        alert("File transfer failed.");
+      }
+    } catch (error) {
+      console.error("Transfer file failed:", error);
+      alert("Transfer file failed.");
+    } finally {
+      setContextMenu({ visible: false });
+    }
+  };
 
-  const handleModal = () => {
+  const handleModal = (file) => {
     document.getElementById("my_modal_1").showModal();
+    setFileName(file);
   };
 
   // Show context menu
@@ -249,31 +267,15 @@ const FileManager = () => {
 
         <dialog id="my_modal_1" className="modal">
           <div className="modal-box">
-            <h3 className="font-bold text-lg">Create New Token</h3>
+            <h3 className="font-bold text-lg">Transfer File: {fileName}</h3>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                const newToken = {
-                  id: Date.now().toString(),
-                  PublicKeyPenerima: e.target.penerima.value,
-                  idFolder: e.target.folder.value,
-                };
-                setDataAkses([...dataAkses, newToken]);
-                e.target.reset();
+                const receiver = e.target.penerima.value;
                 document.getElementById("my_modal_1").close();
+                handleTransfer(receiver, fileName);
               }}
             >
-              <div className="mb-4">
-                <label className="mb-1 block text-gray-400 text-sm">
-                  📁 Folder ID:
-                </label>
-                <input
-                  type="text"
-                  name="folder"
-                  required
-                  className="w-full rounded-md border border-gray-600 bg-[#1A1A1A] px-3 py-2 text-white focus:outline-none"
-                />
-              </div>
               <div className="mb-4">
                 <label className="mb-1 block text-gray-400 text-sm">
                   🏷️ Penerima:
@@ -287,7 +289,7 @@ const FileManager = () => {
               </div>
               <div className="modal-action">
                 <button type="submit" className="btn btn-primary">
-                  Save
+                  Transfer
                 </button>
                 <button
                   type="button"

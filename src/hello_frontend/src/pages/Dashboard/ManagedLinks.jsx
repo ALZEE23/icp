@@ -1,54 +1,43 @@
 import { Plus, Trash } from "lucide-react";
 import { useState } from "react";
+import { hello_backend } from "../../../../declarations/hello_backend";
 
-const InitialDataAkses = [
-    {
-        id: "1",
-        PublicKeyPenerima: "0x1a2b3c4d5e6f",
-        PublicKeyPengirim: "0x6f5e4d3c2b1a",
-        idFolder: "0x1a2b3c4d5e6f",
-    },
-    {
-        id: "2",
-        PublicKeyPenerima: "0x6f5e4d3c2b1a",
-        PublicKeyPengirim: "0x1a2b3c4d5e6f",
-        idFolder: "0x6f5e4d3c2b1a",
-    },
-    {
-        id: "3",
-        PublicKeyPenerima: "0x1a2b3c4d5e6f",
-        PublicKeyPengirim: "0x6f5e4d3c2b1a",
-        idFolder: "0x1a2b3c4d5e6f",
-    },
-];
+// const InitialDataAkses = [
+//     {
+//         id: "1",
+//         PublicKeyPenerima: "0x1a2b3c4d5e6f",
+//         PublicKeyPengirim: "0x6f5e4d3c2b1a",
+//         idFolder: "0x1a2b3c4d5e6f",
+//     },
+//     {
+//         id: "2",
+//         PublicKeyPenerima: "0x6f5e4d3c2b1a",
+//         PublicKeyPengirim: "0x1a2b3c4d5e6f",
+//         idFolder: "0x6f5e4d3c2b1a",
+//     },
+//     {
+//         id: "3",
+//         PublicKeyPenerima: "0x1a2b3c4d5e6f",
+//         PublicKeyPengirim: "0x6f5e4d3c2b1a",
+//         idFolder: "0x1a2b3c4d5e6f",
+//     },
+// ];
 
 const ManagedLinks = () => {
     const [dataAkses, setDataAkses] = useState(InitialDataAkses);
     const [showModal, setShowModal] = useState(false);
 
-    const handleDelete = (id) => {
-        setDataAkses(dataAkses.filter((item) => item.id !== id));
-    };
-
-    const handleAddData = async (newData) => {
-        try {
-            const response = await fetch("/api/addData", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newData),
-            });
-
-            if (response.ok) {
-                const result = await response.json();
-                setDataAkses([...dataAkses, result]);
-            } else {
-                console.error("Failed to add data:", response.statusText);
-            }
-        } catch (error) {
-            console.error("Error adding data:", error);
-        }
+    const transferFile = async (receiverIdText, fileName) => {
+      try {
+        const result = await hello_backend.transferFile(
+          receiverIdText,
+          fileName
+        );
+        return result;
+      } catch (error) {
+        console.error("Transfer file failed:", error);
+        return false;
+      }
     };
 
     return (
