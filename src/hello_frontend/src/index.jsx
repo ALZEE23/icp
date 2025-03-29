@@ -4,12 +4,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "~/styles/index.css";
 
+import DashboardLayout from "~/components/layouts/DashboardLayout";
 import MainLayout from "~/components/layouts/MainLayout";
 import ProtectedRoute from "~/components/layouts/ProtectedRoute";
 import { AuthProvider } from "~/contexts/AuthContext";
+import Dashboard from "~/pages/Dashboard/Dashboard";
 import FileUpload from "~/pages/Dashboard/FileUpload";
 import ManagedLinks from "~/pages/Dashboard/ManagedLinks";
-import Dashboard from "~/pages/Dashboard/dashboard";
 import Home from "~/pages/Home";
 import NotFound from "~/pages/NotFound";
 
@@ -22,9 +23,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
                         <Route index element={<Home />} />
                     </Route>
                     <Route element={<ProtectedRoute />}>
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/managed-links" element={<ManagedLinks />} />
-                        <Route path="/file-upload" element={<FileUpload />} />
+                        <Route element={<DashboardLayout />}>
+                            <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/managed-links" element={<ManagedLinks />} />
+                            <Route path="/file-upload" element={<FileUpload />} />
+                        </Route>
                     </Route>
                     <Route path="*" element={<NotFound />} />
                 </Routes>

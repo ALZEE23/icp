@@ -1,4 +1,21 @@
-import { Code, Database, Globe, Lock, RefreshCw, Shield, Zap } from "lucide-react";
+import {
+    Code,
+    Database,
+    Download,
+    FileText,
+    Folder,
+    Globe,
+    House,
+    Image,
+    Link,
+    Lock,
+    Music,
+    Package,
+    RefreshCw,
+    Shield,
+    Video,
+    Zap,
+} from "lucide-react";
 
 export const NAV_LINKS = [
     { name: "Home", path: "/" },
@@ -62,3 +79,52 @@ export const HOW_IT_WORKS = [
         description: "Manage duplicate content with proper URL structures.",
     },
 ];
+
+export const DASHBOARD_NAV_LINKS = [
+    {
+        icon: House,
+        label: "Dashboard",
+        link: "/dashboard",
+    },
+    {
+        icon: Link,
+        label: "Manage Your Links",
+        link: "/manage-links",
+    },
+    {
+        icon: Folder,
+        label: "My Files",
+        link: "/my-files",
+    },
+];
+
+export const FILE_CARD_TYPES = {
+    image: {
+        icon: Image,
+        color: "bg-green-500",
+    },
+    videos: {
+        icon: Video,
+        color: "bg-red-500",
+    },
+    audios: {
+        icon: Music,
+        color: "bg-blue-500",
+    },
+    documents: {
+        icon: FileText,
+        color: "bg-orange-500",
+    },
+    apps: {
+        icon: Package,
+        color: "bg-purple-500",
+    },
+    downloads: {
+        icon: Download,
+        color: "bg-indigo-500",
+    },
+    default: {
+        icon: FileText,
+        color: "bg-zinc-500",
+    },
+};

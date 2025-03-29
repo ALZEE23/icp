@@ -1,6 +1,7 @@
-import { Copy, Eye, EyeOff, Key, Link, Plus, RefreshCw, Shield, Trash, Users } from "lucide-react";
-import React, { useState } from "react";
-import Layout from "../../pages/Dashboard/components/layout";
+import { Copy, Eye, EyeOff, Plus, Shield, Trash } from "lucide-react";
+import { useState } from "react";
+
+import DashboardLayout from "~/components/layouts/DashboardLayout";
 
 const initialLinks = [
     {
@@ -117,7 +118,7 @@ const ManagedLinks = () => {
     };
 
     return (
-        <Layout>
+        <DashboardLayout>
             <div className="container mx-auto px-4 py-8">
                 <div className="mb-8">
                     <h1 className="mb-2 font-bold text-3xl">Managed Links & Access</h1>
@@ -236,7 +237,7 @@ const ManagedLinks = () => {
                     </div>
                 </div>
             </div>
-        </Layout>
+        </DashboardLayout>
     );
 };
 
