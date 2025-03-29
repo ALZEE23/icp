@@ -6,7 +6,7 @@ import { useAuth } from "~/contexts/AuthContext";
 import { FOOTER_LINKS, NAV_LINKS } from "~/lib/constant";
 
 const MainLayout = () => {
-    const { login } = useAuth();
+    const { isAuthenticated, login } = useAuth();
     const navigate = useNavigate();
 
     const handleLogin = async () => {
@@ -40,10 +40,10 @@ const MainLayout = () => {
                     </ul>
                     <div className="navbar-end">
                         <button
-                            onClick={handleLogin}
+                            onClick={isAuthenticated ? () => navigate("/dashboard") : handleLogin}
                             className="hidden rounded-full border border-white px-5 py-1.5 font-semibold text-sm transition-colors hover:bg-white/30 lg:block"
                         >
-                            Login
+                            {isAuthenticated ? "Dashboard" : "Login"}
                         </button>
                         <div className="flex-none lg:hidden">
                             <label
@@ -67,7 +67,7 @@ const MainLayout = () => {
                             <ShieldCheck className="size-8 text-blue-500" />
                             <span className="font-semibold text-sm md:text-lg">SecureVault</span>
                         </Link>
-                        <span className="text-gray-600 text-sm">
+                        <span className="text-sm text-zinc-600">
                             &copy; SecureVault - All rights reserved.
                         </span>
                     </aside>
@@ -94,7 +94,7 @@ const MainLayout = () => {
             </div>
             <div className="drawer-side z-999">
                 <label htmlFor="sidebar" aria-label="close sidebar" className="drawer-overlay" />
-                <ul className="menu min-h-svh w-80 bg-gray-900 p-4 shadow-lg backdrop-blur-lg">
+                <ul className="menu min-h-svh w-80 bg-zinc-950 p-4 shadow-lg backdrop-blur-lg">
                     {NAV_LINKS.map((link) => (
                         <li key={link.path}>
                             <Link
@@ -120,7 +120,7 @@ const SocialIcon = ({ link, icon: Icon }) => {
     return (
         <a
             href={link}
-            className="p-2 text-gray-400 transition hover:text-white"
+            className="p-2 text-zinc-400 transition hover:text-white"
             target="_blank"
             rel="noopener noreferrer"
         >
